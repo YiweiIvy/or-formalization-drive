@@ -41,8 +41,8 @@ nothing is pushed to `main` directly.
      fork.
    - **With write access:** clone this repository.
 
-   A partial clone is enough and much faster than a full one (the repository
-   is over 1 GB):
+   A partial clone is enough. It skips the files of older snapshots; the
+   checkout itself is still about 1 GB:
 
    ```sh
    git clone --filter=blob:none https://github.com/<you-or-prove2me>/or-formalization-drive
