@@ -6,6 +6,8 @@ lemmas. [`benchmark/README.md`](benchmark/README.md) defines the graph and the
 scores. This page is about entering a method.
 
 A submission is a pull request that adds one folder, `submissions/<name>/`.
+Anyone can send one: from a fork, or from a branch of this repository if you
+have write access. Both are scored the same way.
 [`submissions/example-row-stochastic`](submissions/example-row-stochastic) is a
 complete small one and [`submissions/_template`](submissions/_template) is a
 skeleton to copy.
@@ -33,12 +35,17 @@ nothing is pushed to `main` directly.
 
 ## Steps
 
-0. Get a branch to work on. Without write access to this repository, fork it
-   on GitHub and clone your fork; with write access, clone this repository and
-   create a branch. Either way a partial clone is enough and much faster:
+0. Get a branch to work on.
+   - **Without write access:** press *Fork* on
+     <https://github.com/prove2me/or-formalization-drive>, then clone your
+     fork.
+   - **With write access:** clone this repository.
+
+   A partial clone is enough and much faster than a full one (the repository
+   is over 1 GB):
 
    ```sh
-   git clone --filter=blob:none https://github.com/<you>/or-formalization-drive
+   git clone --filter=blob:none https://github.com/<you-or-prove2me>/or-formalization-drive
    cd or-formalization-drive
    git checkout -b <name>
    ```
@@ -59,10 +66,21 @@ nothing is pushed to `main` directly.
 
    The command exits with an error and lists the problems if the submission
    breaks a rule that it can check.
-6. Commit, push the branch (to your fork, if you work on one), and open a pull
-   request against `main` of this repository. CI posts the score as a comment
-   within a minute and updates it on every push. This works the same for pull
-   requests from forks.
+6. Commit and push the branch, to your fork if you work on one:
+
+   ```sh
+   git add submissions/<name>
+   git commit -m "Submission: <name>"
+   git push -u origin <name>
+   ```
+
+   Then open a pull request against `main` of
+   `prove2me/or-formalization-drive` (GitHub offers this after the push; from
+   a fork, choose *compare across forks*).
+7. CI posts the score as a comment on the pull request within a minute and
+   updates that comment on every push. If the comment says the submission was
+   not scored or has problems, fix what it lists and push again.
+8. A maintainer reviews and merges. You cannot push to `main` yourself.
 
 ## Files
 
