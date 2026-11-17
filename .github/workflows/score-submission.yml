@@ -3,34 +3,47 @@ name: Score submission
 # Scores a pull request that adds or changes submissions/<name>/ against the
 # base snapshot and posts the result as a comment. It runs the Python scorer
 # only: no Lean toolchain, no Mathlib, no compilation.
+#
+# The trigger is pull_request_target so that pull requests from forks get a
+# comment too. That event runs with a token that can write, so this workflow
+# never runs anything from the pull request: the scorer and the snapshot come
+# from the base branch, and the submission's files are only read as data.
 
 on:
-  pull_request:
+  pull_request_target:
     paths:
       - "submissions/**"
+  workflow_dispatch:
+    inputs:
+      pr:
+        description: "Number of the pull request to score again"
+        required: true
 
 permissions:
   contents: read
   pull-requests: write
 
 concurrency:
-  group: score-${{ github.event.pull_request.number }}
+  group: score-${{ github.event.pull_request.number || inputs.pr }}
   cancel-in-progress: true
 
 jobs:
   score:
     runs-on: ubuntu-latest
+    env:
+      PR: ${{ github.event.pull_request.number || inputs.pr }}
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
     steps:
-      # The scorer reads the index and graph files, not the 90,000 Lean files
-      # of the snapshot, so only those are checked out.
+      # The base branch, never the pull request. The scorer reads the index and
+      # graph files, not the 90,000 Lean files of the snapshot, so only those
+      # are checked out.
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 2
           filter: blob:none
           sparse-checkout-cone-mode: false
           sparse-checkout: |
             /benchmark/
-            /submissions/
             /MANIFEST.json
             /seeds.json
             /envs/*/index-*.jsonl
@@ -40,49 +53,58 @@ jobs:
         id: score
         run: |
           set -euo pipefail
-          # HEAD is the merge of the pull request into its base, HEAD^1 the base.
-          git diff --name-only HEAD^1 HEAD > "$RUNNER_TEMP/changed.txt"
-          if grep -qvE '^submissions/[^_/][^/]*/' "$RUNNER_TEMP/changed.txt"; then
+          [[ "$PR" =~ ^[0-9]+$ ]] || { echo "::error::not a pull request number: $PR"; exit 1; }
+          comment="$RUNNER_TEMP/comment.md"
+          gh api "repos/$GH_REPO/pulls/$PR/files" --paginate --jq '.[].filename' > "$RUNNER_TEMP/changed.txt"
+
+          # A submission changes submissions/<name>/ and nothing else.
+          ok='^submissions/[A-Za-z0-9][A-Za-z0-9_-]*/'
+          if grep -qvE "$ok" "$RUNNER_TEMP/changed.txt"; then
             {
-              echo "This pull request changes files outside \`submissions/<name>/\`, so it is not scored as a submission:"
+              echo "### Graph-refinement score"
               echo
-              grep -vE '^submissions/[^_/][^/]*/' "$RUNNER_TEMP/changed.txt" | head -20 | sed 's/^/- `/; s/$/`/'
-            } >> "$GITHUB_STEP_SUMMARY"
+              echo "Not scored: a submission changes \`submissions/<name>/\` and nothing else"
+              echo "(\`<name>\`: letters, digits, \`-\` and \`_\`). This pull request also changes:"
+              echo
+              grep -vE "$ok" "$RUNNER_TEMP/changed.txt" | head -20 | tr -d '`' | sed 's/^/- `/; s/$/`/'
+            } > "$comment"
+            cat "$comment" >> "$GITHUB_STEP_SUMMARY"
+            echo "comment=yes" >> "$GITHUB_OUTPUT"
             exit 0
           fi
+
+          # Copy the submission folders out of the pull request, as files to read.
+          git fetch --quiet --depth=1 --filter=blob:none origin "refs/pull/$PR/head"
+          mkdir -p "$RUNNER_TEMP/pr"
           failed=no
-          : > "$RUNNER_TEMP/comment.md"
-          for dir in $(grep -oE '^submissions/[^/]+' "$RUNNER_TEMP/changed.txt" | sort -u); do
-            [ -d "$dir" ] || continue
-            if ! python3 benchmark/or_bench.py score --markdown --submission "$dir" \
-                > "$RUNNER_TEMP/out.md" 2> "$RUNNER_TEMP/err.txt"; then
+          : > "$comment"
+          while IFS= read -r dir; do
+            git archive FETCH_HEAD "$dir" 2>/dev/null | tar -x -C "$RUNNER_TEMP/pr" || continue
+            find "$RUNNER_TEMP/pr" -type l -delete
+            [ -d "$RUNNER_TEMP/pr/$dir" ] || continue
+            if ! (cd "$RUNNER_TEMP/pr" && python3 "$GITHUB_WORKSPACE/benchmark/or_bench.py" score --markdown \
+                --data "$GITHUB_WORKSPACE" --submission "$dir") > "$RUNNER_TEMP/out.md" 2> "$RUNNER_TEMP/err.txt"; then
               failed=yes
               if [ ! -s "$RUNNER_TEMP/out.md" ]; then
-                { echo "### Graph-refinement score: \`$dir\`"; echo; echo '```'; cat "$RUNNER_TEMP/err.txt"; echo '```'; } \
+                { echo "### Graph-refinement score: \`$dir\`"; echo; echo '```'; tr -d '`' < "$RUNNER_TEMP/err.txt"; echo '```'; } \
                   > "$RUNNER_TEMP/out.md"
               fi
             fi
-            { cat "$RUNNER_TEMP/out.md"; echo; } >> "$RUNNER_TEMP/comment.md"
-          done
-          cat "$RUNNER_TEMP/comment.md" >> "$GITHUB_STEP_SUMMARY"
+            { cat "$RUNNER_TEMP/out.md"; echo; } >> "$comment"
+          done < <(grep -oE '^submissions/[A-Za-z0-9][A-Za-z0-9_-]*' "$RUNNER_TEMP/changed.txt" | sort -u)
+          cat "$comment" >> "$GITHUB_STEP_SUMMARY"
           echo "failed=$failed" >> "$GITHUB_OUTPUT"
-          if [ -s "$RUNNER_TEMP/comment.md" ]; then echo "comment=yes" >> "$GITHUB_OUTPUT"; fi
+          if [ -s "$comment" ]; then echo "comment=yes" >> "$GITHUB_OUTPUT"; fi
 
-      # One comment per pull request, updated on every push. A pull request from
-      # a fork has a read-only token: the score is then in the job summary only.
+      # One comment per pull request, updated on every push.
       - name: Comment
         if: steps.score.outputs.comment == 'yes'
-        env:
-          GH_TOKEN: ${{ github.token }}
-          GH_REPO: ${{ github.repository }}
-          PR: ${{ github.event.pull_request.number }}
         run: |
           gh pr comment "$PR" --edit-last --body-file "$RUNNER_TEMP/comment.md" \
-            || gh pr comment "$PR" --body-file "$RUNNER_TEMP/comment.md" \
-            || echo "::warning::Could not comment on the pull request; the score is in the job summary."
+            || gh pr comment "$PR" --body-file "$RUNNER_TEMP/comment.md"
 
       - name: Fail if the submission has problems
         if: steps.score.outputs.failed == 'yes'
         run: |
-          echo "::error::The submission has problems; see the comment or the job summary."
+          echo "::error::The submission has problems; see the comment on the pull request."
           exit 1

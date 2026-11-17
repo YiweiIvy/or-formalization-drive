@@ -575,13 +575,15 @@ def cmd_score(a):
 
 
 def markdown_report(res):
-    """The score as a GitHub comment."""
+    """The score as a GitHub comment. Names and paths come from the submission, so they are
+    stripped of what could end a code span or notify someone."""
+    safe = lambda s: str(s).replace("`", "'").replace("@", "(at)")
     r, ad, dp = res["per_env"][res["env"]], res["added"], res["deprecated"]
     b, s = r["base"], r["submission"]
-    out = [f"### Graph-refinement score: `{'`, `'.join(res['submission'])}`", ""]
+    out = [f"### Graph-refinement score: `{'`, `'.join(map(safe, res['submission']))}`", ""]
     if res["problems"]:
         out += [f"**{len(res['problems'])} problem(s). The numbers below do not count until they are fixed.**", ""]
-        out += [f"- `{p['where']}`: {p['what']}" for p in res["problems"][:50]] + [""]
+        out += [f"- `{safe(p['where'])}`: {safe(p['what'])}" for p in res["problems"][:50]] + [""]
     out += [f"Environment `{res['env']}`, against the base snapshot `v0`.", "",
             "| | base | submission | change |", "|---|---:|---:|---:|"]
 
@@ -614,7 +616,7 @@ def markdown_report(res):
         out += ["", f"{ad['edges_from_graph_rows']:,} of the new edges are declared in graph rows; no Lean file backs them."]
     if res["largest_fan"]:
         out += ["", "New nodes that touch the most base components directly:", ""]
-        out += [f"- `{f['name']}`: {f['base_components_touched']:,}" for f in res["largest_fan"][:5]]
+        out += [f"- `{safe(f['name'])}`: {f['base_components_touched']:,}" for f in res["largest_fan"][:5]]
     out += ["", "The scorer reads `import` lines. It does not compile the Lean files."]
     return "\n".join(out)
 

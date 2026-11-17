@@ -6,6 +6,8 @@ lemmas. [`benchmark/README.md`](benchmark/README.md) defines the graph and the
 scores. This page is about entering a method.
 
 A submission is a pull request that adds one folder, `submissions/<name>/`.
+Anyone can send one: from a fork, or from a branch of this repository if you
+have write access. Both are scored the same way.
 [`submissions/example-row-stochastic`](submissions/example-row-stochastic) is a
 complete small one and [`submissions/_template`](submissions/_template) is a
 skeleton to copy.
@@ -33,6 +35,21 @@ nothing is pushed to `main` directly.
 
 ## Steps
 
+0. Get a branch to work on.
+   - **Without write access:** press *Fork* on
+     <https://github.com/prove2me/or-formalization-drive>, then clone your
+     fork.
+   - **With write access:** clone this repository.
+
+   A partial clone is enough. It skips the files of older snapshots; the
+   checkout itself is still about 1 GB:
+
+   ```sh
+   git clone --filter=blob:none https://github.com/<you-or-prove2me>/or-formalization-drive
+   cd or-formalization-drive
+   git checkout -b <name>
+   ```
+
 1. Copy `submissions/_template` to `submissions/<name>` (letters, digits, `-`
    and `_`; not starting with `_`).
 2. Put your Lean files under `submissions/<name>/envs/0df444a/`
@@ -49,8 +66,21 @@ nothing is pushed to `main` directly.
 
    The command exits with an error and lists the problems if the submission
    breaks a rule that it can check.
-6. Open a pull request. CI posts the score as a comment and updates it on every
-   push.
+6. Commit and push the branch, to your fork if you work on one:
+
+   ```sh
+   git add submissions/<name>
+   git commit -m "Submission: <name>"
+   git push -u origin <name>
+   ```
+
+   Then open a pull request against `main` of
+   `prove2me/or-formalization-drive` (GitHub offers this after the push; from
+   a fork, choose *compare across forks*).
+7. CI posts the score as a comment on the pull request within a minute and
+   updates that comment on every push. If the comment says the submission was
+   not scored or has problems, fix what it lists and push again.
+8. A maintainer reviews and merges. You cannot push to `main` yourself.
 
 ## Files
 
@@ -132,7 +162,9 @@ replacement, then deprecate the old node.
 
 ## What CI checks
 
-The check is one Python command and takes a few seconds:
+The check is one Python command and takes a few seconds. It always uses the
+scorer and the snapshot of `main`, and only reads the files of the pull
+request:
 
 - the pull request changes only `submissions/<name>/` (one that changes
   anything else is not scored);
