@@ -21,8 +21,12 @@ baseline and scores a submission.
 
 ```sh
 python3 benchmark/or_bench.py stats
-python3 benchmark/or_bench.py score --submission benchmark/example
+python3 benchmark/or_bench.py score --submission submissions/example-row-stochastic
 ```
+
+Methods are entered as pull requests that add a folder under
+[`submissions/`](submissions); each is scored against the frozen base snapshot
+(tag `v0`). See [`CONTRIBUTING.md`](CONTRIBUTING.md).
 
 ## License
 
