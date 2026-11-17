@@ -33,6 +33,16 @@ nothing is pushed to `main` directly.
 
 ## Steps
 
+0. Get a branch to work on. Without write access to this repository, fork it
+   on GitHub and clone your fork; with write access, clone this repository and
+   create a branch. Either way a partial clone is enough and much faster:
+
+   ```sh
+   git clone --filter=blob:none https://github.com/<you>/or-formalization-drive
+   cd or-formalization-drive
+   git checkout -b <name>
+   ```
+
 1. Copy `submissions/_template` to `submissions/<name>` (letters, digits, `-`
    and `_`; not starting with `_`).
 2. Put your Lean files under `submissions/<name>/envs/0df444a/`
@@ -49,8 +59,10 @@ nothing is pushed to `main` directly.
 
    The command exits with an error and lists the problems if the submission
    breaks a rule that it can check.
-6. Open a pull request. CI posts the score as a comment and updates it on every
-   push.
+6. Commit, push the branch (to your fork, if you work on one), and open a pull
+   request against `main` of this repository. CI posts the score as a comment
+   within a minute and updates it on every push. This works the same for pull
+   requests from forks.
 
 ## Files
 
@@ -132,7 +144,9 @@ replacement, then deprecate the old node.
 
 ## What CI checks
 
-The check is one Python command and takes a few seconds:
+The check is one Python command and takes a few seconds. It always uses the
+scorer and the snapshot of `main`, and only reads the files of the pull
+request:
 
 - the pull request changes only `submissions/<name>/` (one that changes
   anything else is not scored);
