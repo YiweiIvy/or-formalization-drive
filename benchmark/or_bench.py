@@ -30,19 +30,24 @@ Headline scores:
                      mission from a different source work, i.e. the two are
                      built on at least one common file.
 
-A submission is an overlay in the subset's own layout. Any of these work, and
-they can be mixed:
+A submission is an overlay in the subset's own layout. Published files are
+immutable, as on Prove2Me: a submission only adds files and retires nodes.
 
-  my_method/envs/<env>/Definitions/Def_*.lean   new (or edited) definition files
-  my_method/envs/<env>/Theorems/Thm_*.lean      new (or edited) theorem statements
-  my_method/envs/<env>/Solutions/Sol_*.lean     new (or edited) proofs
+  my_method/envs/<env>/Definitions/Def_*.lean   new definition files
+  my_method/envs/<env>/Theorems/Thm_*.lean      new theorem statements
+  my_method/envs/<env>/Solutions/Sol_*.lean     proofs of the new theorems, and new
+                                                proofs or sketches of existing ones
+                                                (Sol_<slug>_<n>.lean, a free <n>)
+  my_method/manifest.jsonl                      {"deprecate","replaced_by","reason"}
+                                                rows: nodes the method retires
   my_method/envs/<env>/graph-*.jsonl            {"parent","child","via"} rows, for
                                                 quick experiments without Lean files
   my_method/envs/<env>/index-*.jsonl            {"theorem_name","module"} rows for
                                                 nodes named only in graph rows
 
-Edges from .lean files are read from their `import` lines. Scoring is the union
-E0 | E+: edges are only ever added. This script does NOT compile anything; a
+Edges from .lean files are read from their `import` lines. The submission is
+scored on the graph that is left after its deprecations: a retired node is not
+counted and no path runs through it. This script does NOT compile anything; a
 submission's Lean files must be verified separately before its score means
 anything.
 
@@ -63,6 +68,7 @@ REPO = Path(__file__).resolve().parent.parent
 LOCAL = ("Theorems.", "Definitions.")
 IMPORT = re.compile(r"^\s*(?:public\s+|private\s+|meta\s+)*import\s+(?:all\s+)?(\S+)")
 SOL_HEADER = re.compile(r"^-- Prove2me \| solution \d+ for (.+?)\s*$")
+NAME_HEADER = re.compile(r"^-- name\s*:\s*(\S+)\s*$")
 PART = re.compile(r"\s+(?:[IVXLC]+|\d+|Part\s+\S+)\s*$")
 
 
@@ -81,6 +87,18 @@ def shards(env_dir: Path, kind: str):
             for line in fh:
                 if line.strip():
                     yield json.loads(line)
+
+
+def header_name(path: Path):
+    """The item name a Lean file's provenance header gives (`-- name    : <name>`), if any."""
+    with path.open(encoding="utf-8", errors="replace") as fh:
+        for _, line in zip(range(12), fh):
+            m = NAME_HEADER.match(line)
+            if m:
+                return m.group(1)
+            if not line.startswith("--"):
+                break
+    return None
 
 
 def lean_imports(path: Path):
@@ -111,8 +129,12 @@ class Graph:
         self.by_name = {}               # (env, theorem_name) -> key
         self.by_id = {}                 # theorem id -> key
         self.edges = {}                 # (parent key, child key) -> {"via": set, "original": bool}
-        self.unresolved = []            # (file or row, what could not be resolved)
+        self.problems = []              # (file or row, what is wrong with it); a submission with any is rejected
         self.default_env = None
+        self.base_solutions = set()     # (env, file name) of every solution file in the dataset
+        self.dead = {}                  # deprecated node -> the node its manifest row names as replacement, or None
+        self.sub_solved = Counter()     # node -> solution files the submission ships for it
+        self.row_edges = 0              # submission edges declared in graph rows, not read from Lean files
 
     # ---- loading -------------------------------------------------------
     def add_node(self, env, module, name=None, original=False, row=None):
@@ -152,6 +174,7 @@ class Graph:
             env = env_dir.name
             for r in shards(env_dir, "index"):
                 self.add_node(env, r["module"], r["theorem_name"], original=True, row=r)
+                self.base_solutions.update((env, Path(x["path"]).name) for x in r.get("solutions", []))
             for e in shards(env_dir, "graph"):
                 p, c = self.resolve(env, e["parent"]), self.resolve(env, e["child"])
                 if p is None or c is None:
@@ -164,8 +187,12 @@ class Graph:
         envs = sub / "envs"
         if not envs.is_dir():
             sys.exit(f"{sub}: expected an envs/<env>/ directory (see --help)")
+        bad = self.problems.append
+        if not (sub / "README.md").is_file():
+            bad((str(sub), "no README.md describing the method"))
         known_envs = {k[0] for k in self.nodes}
-        for env_dir in sorted(envs.iterdir()):
+        placed = set()
+        for env_dir in sorted(p for p in envs.iterdir() if p.is_dir()):
             env = env_dir.name
             if env not in known_envs:
                 sys.exit(f"{sub}: environment {env!r} is not in the dataset; "
@@ -174,33 +201,90 @@ class Graph:
             for r in shards(env_dir, "index"):
                 self.add_node(env, r.get("module") or r["theorem_name"], r.get("theorem_name"), row=r)
             stmt_files = []
-            for d in ("Theorems", "Definitions"):
+            for d, prefix in (("Theorems", "Thm_"), ("Definitions", "Def_")):
                 for f in sorted((env_dir / d).glob("*.lean")):
-                    self.add_node(env, f"{d}.{f.stem}")
-                    stmt_files.append((f, (env, f"{d}.{f.stem}")))
+                    placed.add(f)
+                    key = (env, f"{d}.{f.stem}")
+                    if not f.stem.startswith(prefix):
+                        bad((str(f), f"files in {d}/ are named {prefix}*.lean"))
+                    elif key in self.nodes and self.nodes[key]["original"]:
+                        bad((str(f), "this file is in the base snapshot; published files are immutable, "
+                                     "so add a new node under a new name"))
+                    else:
+                        self.add_node(env, key[1], header_name(f))
+                        stmt_files.append((f, key))
             # pass 2: edges
             for f, key in stmt_files:
                 self._imports(env, f, key, "statement")
             for f in sorted((env_dir / "Solutions").glob("*.lean")):
-                parent = self._solution_parent(env, f)
-                if parent is None:
-                    self.unresolved.append((str(f), "no theorem for this solution file"))
+                placed.add(f)
+                if (env, f.name) in self.base_solutions:
+                    bad((str(f), "this file is in the base snapshot; published solutions are immutable, "
+                                 "so ship a new proof as Sol_<slug>_<n>.lean with a free <n>"))
                     continue
+                parent = self._solution_parent(env, f) if f.stem.startswith("Sol_") else None
+                if parent is None:
+                    bad((str(f), "no theorem for this solution file (expected Sol_<slug>.lean or "
+                                 "Sol_<slug>_<n>.lean for Theorems/Thm_<slug>.lean)"))
+                    continue
+                self.sub_solved[parent] += 1
                 self._imports(env, f, parent, "solution")
             for e in shards(env_dir, "graph"):
                 p, c = self.resolve(env, e["parent"]), self.resolve(env, e["child"])
                 if p is None or c is None:
-                    self.unresolved.append((f"{env} graph row", f"{e['parent']} -> {e['child']}"))
+                    bad((f"{env} graph row", f"{e['parent']} -> {e['child']} names an unknown item"))
                     continue
+                self.row_edges += (p, c) not in self.edges
                 self.add_edge(p, c, e.get("via", ["statement"]))
+        for f in sorted(sub.rglob("*.lean")):
+            if f not in placed:
+                bad((str(f), "Lean files go in envs/<env>/Definitions, Theorems or Solutions"))
+        self._manifest(sub / "manifest.jsonl")
+
+    def _manifest(self, path: Path):
+        """Deprecations: one JSON object per line, {"deprecate": node, "replaced_by": node, "reason": text}.
+        A node is named by its theorem name or its module; "env" defaults to the default environment."""
+        if not path.is_file():
+            return
+        rows = []
+        for i, line in enumerate(path.read_text(encoding="utf-8").splitlines(), 1):
+            if not line.strip():
+                continue
+            where = f"{path}:{i}"
+            try:
+                row = json.loads(line)
+            except ValueError as err:
+                self.problems.append((where, f"not a JSON object ({err})"))
+                continue
+            if not isinstance(row, dict) or not isinstance(row.get("deprecate"), str):
+                self.problems.append((where, 'expected {"deprecate": "<node>", "replaced_by": "<node>", "reason": "..."}'))
+                continue
+            env = row.get("env") or self.default_env
+            d = self.resolve(env, row["deprecate"])
+            if d is None or not self.nodes[d]["original"]:
+                self.problems.append((where, f"deprecate: {row['deprecate']!r} is not a node of the base snapshot in {env}"))
+                continue
+            r = None
+            if row.get("replaced_by"):
+                r = self.resolve(env, row["replaced_by"])
+                if r is None:
+                    self.problems.append((where, f"replaced_by: {row['replaced_by']!r} is not a node in {env}"))
+                    continue
+            self.dead[d] = r
+            rows.append((where, row, r))
+        for where, row, r in rows:
+            if r in self.dead:
+                self.problems.append((where, f"replaced_by: {row['replaced_by']!r} is itself deprecated"))
 
     def _imports(self, env, f, parent, via):
         for mod in lean_imports(f):
             if mod.startswith(LOCAL):
-                if (env, mod) in self.nodes:
+                if (env, mod) == parent:
+                    self.problems.append((str(f), f"import {mod}: a proof cannot import the theorem it proves"))
+                elif (env, mod) in self.nodes:
                     self.add_edge(parent, (env, mod), [via])
                 else:
-                    self.unresolved.append((str(f), f"import {mod}"))
+                    self.problems.append((str(f), f"import {mod}: no such module in the dataset or the submission"))
 
     def _solution_parent(self, env, f):
         with f.open(encoding="utf-8", errors="replace") as fh:
@@ -214,8 +298,8 @@ class Graph:
         return None
 
     # ---- metrics -------------------------------------------------------
-    def components(self, original_edges_only=False):
-        """Weak components. Returns find() over all nodes."""
+    def components(self, original_edges_only=False, dead=()):
+        """Weak components of the graph without the `dead` nodes. Returns find() over all nodes."""
         par = {k: k for k in self.nodes}
 
         def find(x):
@@ -225,16 +309,17 @@ class Graph:
             return x
 
         for (p, c), e in self.edges.items():
-            if original_edges_only and not e["original"]:
+            if (original_edges_only and not e["original"]) or p in dead or c in dead:
                 continue
             a, b = find(p), find(c)
             if a != b:
                 par[a] = b
         return find
 
-    def connectivity(self, find, env=None):
-        """Component stats counted over ORIGINAL nodes only (new nodes are bridges)."""
-        orig = [k for k, n in self.nodes.items() if n["original"] and (env is None or k[0] == env)]
+    def connectivity(self, find, env=None, dead=()):
+        """Component stats counted over ORIGINAL nodes only (new nodes are bridges), minus the `dead` ones."""
+        orig = [k for k, n in self.nodes.items()
+                if n["original"] and (env is None or k[0] == env) and k not in dead]
         sizes = sorted(Counter(find(k) for k in orig).values(), reverse=True)
         n = len(orig)
         return {
@@ -248,20 +333,24 @@ class Graph:
             "top_sizes": sizes[:10],
         }
 
-    def children(self, original_edges_only=False):
+    def children(self, original_edges_only=False, dead=()):
         ch = defaultdict(list)
         for (p, c), e in self.edges.items():
-            if not (original_edges_only and not e["original"]):
+            if not (original_edges_only and not e["original"]) and p not in dead and c not in dead:
                 ch[p].append(c)
         return ch
 
-    def missions(self, seeds, find, ch, members=None):
+    def missions(self, seeds, find, ch, members=None, dead=()):
+        """Mission metrics. A mission whose goal is `dead` is not scored; nor is a dead member one of its items."""
         ms = seeds["missions"]
+        live = {i: k for i, k in self.by_id.items() if k not in dead}
         roots = {}                              # mission id -> its own items (goal, plus members if given)
         for m in ms:
-            ks = {self.by_id[t] for t in (members or {}).get(m["id"], ()) if t in self.by_id}
-            if m.get("goal") in self.by_id:
-                ks.add(self.by_id[m["goal"]])
+            ks = {live[t] for t in (members or {}).get(m["id"], ()) if t in live}
+            if m.get("goal") in live:
+                ks.add(live[m["goal"]])
+            elif m.get("goal") in self.by_id:
+                continue
             if ks:
                 roots[m["id"]] = ks
         work = {m["id"]: work_of(m) for m in ms}
@@ -270,7 +359,7 @@ class Graph:
         if not roots:
             return out
         n = len(roots)
-        goals = [self.by_id[m["goal"]] for m in ms if m.get("goal") in self.by_id]
+        goals = [live[m["goal"]] for m in ms if m.get("goal") in live]
         gcomp = Counter(find(k) for k in goals)
         out["goal_components"] = len(gcomp)
         out["mission_pair_connectivity"] = pair_conn(gcomp.values(), len(goals))
@@ -390,7 +479,8 @@ def cmd_score(a):
     for s in a.submission:
         g.load_submission(Path(s))
     env = a.env or g.default_env
-    f0, f1 = g.components(original_edges_only=True), g.components()
+    dead = set(g.dead)
+    f0, f1 = g.components(original_edges_only=True), g.components(dead=dead)
     seeds, members = load_seeds(a), load_members(a)
 
     new_nodes = [k for k, n in g.nodes.items() if not n["original"]]
@@ -406,13 +496,30 @@ def cmd_score(a):
                 touch[x].add(f0(y))
     fan = sorted(((len(v), g.nodes[k]["name"], k[0]) for k, v in touch.items()), reverse=True)[:a.top]
     used = {x for e in new_edges for x in e}
+    kind = lambda ks, what: sum(g.nodes[k]["kind"] == what for k in ks)
 
-    res = {"env": env, "submission": a.submission, "per_env": {}, "unresolved": g.unresolved,
-           "added": {"nodes": len(new_nodes), "edges": len(new_edges), "edges_by_kind": dict(kinds),
+    res = {"env": env, "submission": a.submission, "per_env": {},
+           "problems": [{"where": w, "what": x} for w, x in g.problems],
+           "added": {"nodes": len(new_nodes), "definitions": kind(new_nodes, "definition"),
+                     "theorems": kind(new_nodes, "theorem"),
+                     # new theorems the submission ships no proof for: Open problems it leaves behind
+                     "theorems_without_solution": sum(g.nodes[k]["kind"] == "theorem" and not g.sub_solved[k]
+                                                      for k in new_nodes),
+                     "solutions_for_original_theorems": sum(n for k, n in g.sub_solved.items()
+                                                            if g.nodes[k]["original"]),
+                     "edges": len(new_edges), "edges_by_kind": dict(kinds),
+                     "edges_from_graph_rows": g.row_edges,
                      "nodes_without_edges": sum(k not in used for k in new_nodes)},
+           "deprecated": {"nodes": len(dead), "definitions": kind(dead, "definition"),
+                          "theorems": kind(dead, "theorem"),
+                          "with_replacement": sum(r is not None for r in g.dead.values()),
+                          "list": [{"env": d[0], "name": g.nodes[d]["name"],
+                                    "replaced_by": g.nodes[r]["name"] if r else None}
+                                   for d, r in sorted(g.dead.items())]},
            "largest_fan": [{"base_components_touched": n, "name": nm, "env": e} for n, nm, e in fan]}
+    res["net_definitions"] = res["added"]["definitions"] - res["deprecated"]["definitions"]
     for e in sorted({k[0] for k in g.nodes}):
-        b, s = g.connectivity(f0, e), g.connectivity(f1, e)
+        b, s = g.connectivity(f0, e), g.connectivity(f1, e, dead)
         k0, k1 = b["components"], s["components"]
         p0, p1 = b["pair_connectivity"], s["pair_connectivity"]
         res["per_env"][e] = {"base": b, "submission": s, "delta_conn": k0 - k1,
@@ -420,15 +527,24 @@ def cmd_score(a):
                              "pair_gain": p1 - p0, "S_pair": (p1 - p0) / (1 - p0) if p0 < 1 else 0.0}
     if seeds:
         res["missions"] = {"base": g.missions(seeds, f0, g.children(True), members),
-                           "submission": g.missions(seeds, f1, g.children(), members)}
+                           "submission": g.missions(seeds, f1, g.children(dead=dead), members, dead)}
     if a.json:
         print(json.dumps(res, indent=2, ensure_ascii=False))
+    elif a.markdown:
+        print(markdown_report(res))
     else:
-        r = res["per_env"][env]
+        r, ad, dp = res["per_env"][env], res["added"], res["deprecated"]
         b, s = r["base"], r["submission"]
         num = lambda v: f"{v:,}"
-        print(f"env {env}: {b['original_nodes']:,} original nodes; submission adds {res['added']['nodes']:,} nodes,"
-              f" {res['added']['edges']:,} edges {res['added']['edges_by_kind']}")
+        print(f"env {env}: {b['original_nodes']:,} original nodes; submission adds {ad['nodes']:,} nodes"
+              f" ({ad['definitions']:,} definition files, {ad['theorems']:,} theorems,"
+              f" {ad['theorems_without_solution']:,} of them without a proof),"
+              f" {ad['solutions_for_original_theorems']:,} new proofs of original theorems,"
+              f" {ad['edges']:,} edges {ad['edges_by_kind']}")
+        if ad["edges_from_graph_rows"]:
+            print(f"  {ad['edges_from_graph_rows']:,} of the edges are declared in graph rows; no Lean file backs them")
+        print(f"  deprecates {dp['nodes']:,} nodes ({dp['definitions']:,} definition files, {dp['theorems']:,} theorems;"
+              f" {dp['with_replacement']:,} name a replacement); net definition files {res['net_definitions']:+,}")
         print(f"  {'':<27}{'base':>10}{'submission':>12}")
 
         def row(name, x, y, f=num, note=""):
@@ -439,9 +555,10 @@ def cmd_score(a):
         if seeds and "S_reuse" in res["missions"]["base"]:
             mb, msub = res["missions"]["base"], res["missions"]["submission"]
             row("S_reuse", mb["S_reuse"], msub["S_reuse"], pct,
-                f"{mb['missions_scored']:,} missions in {mb['works']:,} works, cone from {mb['cone_from']}")
+                f"{msub['missions_scored']:,} missions in {msub['works']:,} works, cone from {mb['cone_from']}")
             row("direct reuse", mb["direct_reuse_cross_work"], msub["direct_reuse_cross_work"], pct)
             row("mission pair connectivity", mb["mission_pair_connectivity"], msub["mission_pair_connectivity"], pct)
+        row("counted nodes", b["original_nodes"], s["original_nodes"], num, "original nodes that are not deprecated")
         row("components", b["components"], s["components"], num,
             f"delta_conn {r['delta_conn']:,}, S_conn {r['S_conn']:.4g}")
         row("isolated nodes", b["singletons"], s["singletons"])
@@ -450,10 +567,56 @@ def cmd_score(a):
             print("  new nodes touching the most base components directly:")
             for n, nm, e in fan:
                 print(f"    {n:>5}  {nm}  [{e}]")
-        for where, what in g.unresolved[:20]:
-            print(f"  UNRESOLVED {where}: {what}", file=sys.stderr)
-    if g.unresolved:
-        sys.exit(f"{len(g.unresolved)} unresolved import(s)/row(s); they were not counted")
+    if g.problems and not (a.json or a.markdown):
+        for where, what in g.problems[:50]:
+            print(f"  PROBLEM {where}: {what}", file=sys.stderr)
+    if g.problems:
+        sys.exit(f"{len(g.problems)} problem(s) in the submission; fix them before the score counts")
+
+
+def markdown_report(res):
+    """The score as a GitHub comment."""
+    r, ad, dp = res["per_env"][res["env"]], res["added"], res["deprecated"]
+    b, s = r["base"], r["submission"]
+    out = [f"### Graph-refinement score: `{'`, `'.join(res['submission'])}`", ""]
+    if res["problems"]:
+        out += [f"**{len(res['problems'])} problem(s). The numbers below do not count until they are fixed.**", ""]
+        out += [f"- `{p['where']}`: {p['what']}" for p in res["problems"][:50]] + [""]
+    out += [f"Environment `{res['env']}`, against the base snapshot `v0`.", "",
+            "| | base | submission | change |", "|---|---:|---:|---:|"]
+
+    def row(name, x, y, f=pct, change=None):
+        d = change if change is not None else (f"{100 * (y - x):+.3f} pt" if f is pct else f"{y - x:+,}")
+        out.append(f"| {name} | {f(x)} | {f(y)} | {d} |")
+
+    num = lambda v: f"{v:,}"
+    row("**Pair connectivity**", b["pair_connectivity"], s["pair_connectivity"])
+    m = res.get("missions")
+    if m and "S_reuse" in m["base"] and "S_reuse" in m["submission"]:
+        row("**S_reuse** (cross-work reuse)", m["base"]["S_reuse"], m["submission"]["S_reuse"])
+        row("Direct reuse", m["base"]["direct_reuse_cross_work"], m["submission"]["direct_reuse_cross_work"])
+        row("Mission pair connectivity", m["base"]["mission_pair_connectivity"],
+            m["submission"]["mission_pair_connectivity"])
+        row("Missions scored", m["base"]["missions_scored"], m["submission"]["missions_scored"], num)
+    row("Counted nodes (original, not deprecated)", b["original_nodes"], s["original_nodes"], num)
+    row("Weak components", b["components"], s["components"], num)
+    row("Isolated nodes", b["singletons"], s["singletons"], num)
+    row("Largest component", b["largest"], s["largest"], num)
+    out += ["", f"`S_pair` = {r['S_pair']:.4g} (share of the missing pair connectivity that was gained)", "",
+            "| Cost | |", "|---|---:|",
+            f"| New definition files | {ad['definitions']:,} |",
+            f"| New theorems | {ad['theorems']:,} ({ad['theorems_without_solution']:,} without a proof) |",
+            f"| New proofs of original theorems | {ad['solutions_for_original_theorems']:,} |",
+            f"| New import edges | {ad['edges']:,} |",
+            f"| Deprecated nodes | {dp['nodes']:,} ({dp['definitions']:,} definition files, {dp['theorems']:,} theorems) |",
+            f"| **Net definition files** (new minus deprecated) | {res['net_definitions']:+,} |"]
+    if ad["edges_from_graph_rows"]:
+        out += ["", f"{ad['edges_from_graph_rows']:,} of the new edges are declared in graph rows; no Lean file backs them."]
+    if res["largest_fan"]:
+        out += ["", "New nodes that touch the most base components directly:", ""]
+        out += [f"- `{f['name']}`: {f['base_components_touched']:,}" for f in res["largest_fan"][:5]]
+    out += ["", "The scorer reads `import` lines. It does not compile the Lean files."]
+    return "\n".join(out)
 
 
 def cmd_probe(a):
@@ -511,6 +674,7 @@ if __name__ == "__main__":
             p.add_argument("--env", help="environment to report (default: the dataset's default)")
         if name == "score":
             p.add_argument("--submission", required=True, nargs="+", help="overlay directory (or several)")
+            p.add_argument("--markdown", action="store_true", help="print the score as a GitHub comment")
         if name == "probe":
             p.add_argument("--pattern", required=True, help="case-insensitive regex over the Lean files' text")
             p.add_argument("--where", choices=("definitions", "theorems", "all"), default="definitions")

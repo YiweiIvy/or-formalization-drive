@@ -1,7 +1,9 @@
 # Toy submission
 
-A format example, not a result. It pretends that the accepted proofs of two
-theorems from different papers were refactored to import one new shared lemma:
+A graph-row example for quick experiments, not a result and not the format of
+a real submission (for that, see `submissions/example-row-stochastic`). It
+pretends that two theorems from different papers each got a new proof that
+imports one new shared lemma:
 
 - `SuttonTD.Convergence.theorem_2` (Sutton, *Learning to Predict by the Methods of Temporal Differences*)
 - `FiniteTD.Markov.theorem_3` (*A Finite Time Analysis of Temporal Difference Learning With Linear Function Approximation*)

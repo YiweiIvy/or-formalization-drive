@@ -13,13 +13,14 @@ no Lean toolchain.
 python3 benchmark/or_bench.py stats
 
 # score a method
-python3 benchmark/or_bench.py score --submission benchmark/example
+python3 benchmark/or_bench.py score --submission submissions/example-row-stochastic
 
 # where to start: components that mention a concept, and what joining them would earn
 python3 benchmark/or_bench.py probe --pattern 'markov chain|transition (matrix|kernel)'
 ```
 
-Add `--json` to any command for machine-readable output.
+Add `--json` to any command for machine-readable output. To enter a method,
+see [`CONTRIBUTING.md`](../CONTRIBUTING.md).
 
 ## The graph
 
@@ -35,8 +36,16 @@ Add `--json` to any command for machine-readable output.
 
 ## Scores
 
-A submission adds new nodes and new import edges; nothing is removed. New nodes
-may sit on a connecting path, but only the original nodes $V_0$ are counted.
+Published files are immutable, as on Prove2Me. A submission adds new nodes and
+new proofs, and it may deprecate original nodes. A new proof of an original
+theorem adds import edges that start at that theorem.
+
+The submission is scored on the graph that is left after its deprecations.
+A deprecated node is hidden from discovery, so nothing new will be built on it:
+it is not counted, and no connecting path or dependency cone runs through it.
+New nodes may sit on a connecting path, but only the original nodes that are
+not deprecated are counted; below, $V_0$ is that set. A mission whose goal is
+deprecated is not scored. The baseline is always the full base snapshot `v0`.
 
 **Benchmark 1, pair connectivity.** Let $\mathcal C(G)$ be the weak components
 of $G$, each restricted to $V_0$.
@@ -65,8 +74,17 @@ item that belongs to a mission of another work.
 
 The two benchmarks reward different things. A bridge theorem that imports two
 bodies of work connects them (Benchmark 1) but is in nobody's cone. Benchmark 2
-moves only when an original statement or proof is changed to import something
-another work also uses.
+moves only when an original theorem gets a new proof, or proof sketch, that
+imports something another work also uses.
+
+Deprecation alone earns nothing: it removes the node's edges, and a node that
+others still import leaves them cut off. It pays once the nodes that used the
+deprecated one have new proofs on its replacement.
+
+The report also lists what the method cost: new definition files, new theorems
+(and how many have no proof), new proofs of original theorems, deprecated
+nodes, and the net number of definition files (new minus deprecated). There is
+no single combined score yet.
 
 ## Baseline
 
@@ -87,29 +105,46 @@ Formalpedia snapshot of 2026-11-10, environment `0df444a`. The full output is in
 
 ## Submissions
 
-A submission is an overlay in the repository's own layout:
+A submission is an overlay in the repository's own layout. It only adds files;
+a file that has the name of a file in the base snapshot is rejected.
 
 ```
-my_method/envs/0df444a/Definitions/Def_*.lean   new or edited definition files
-my_method/envs/0df444a/Theorems/Thm_*.lean      new or edited theorem statements
-my_method/envs/0df444a/Solutions/Sol_*.lean     new or edited proofs
+my_method/README.md                             the method
+my_method/manifest.jsonl                        nodes the method deprecates (optional)
+my_method/envs/0df444a/Definitions/Def_*.lean   new definition files
+my_method/envs/0df444a/Theorems/Thm_*.lean      new theorem statements
+my_method/envs/0df444a/Solutions/Sol_*.lean     proofs of the new theorems, and new
+                                                proofs of original theorems
 ```
 
 Edges are read from the files' `import` lines. `Sol_<slug>.lean` (or
-`Sol_<slug>_<n>.lean`) is a proof of `Thm_<slug>.lean`. To refactor an existing
-proof, ship the edited solution file under its existing name; its new imports
-become new edges from the original theorem.
+`Sol_<slug>_<n>.lean`) is a proof of `Thm_<slug>.lean`. To give an original
+theorem a new proof or proof sketch, ship `Sol_<slug>_<n>.lean` with an `<n>`
+that the snapshot does not use; its imports become new edges from the original
+theorem.
+
+Each line of `manifest.jsonl` deprecates one original node:
+
+```json
+{"deprecate": "Definitions.Def_FiniteTD_Markov_Chain", "replaced_by": "Definitions.Def_Common_Markov_RowStochastic", "reason": "same predicate"}
+```
+
+`replaced_by` and `reason` are optional and are not scored; they record which
+node to use instead.
+
+[`CONTRIBUTING.md`](../CONTRIBUTING.md) has the full rules and
+[`submissions/example-row-stochastic`](../submissions/example-row-stochastic)
+a complete small submission.
 
 For quick experiments without Lean files, an overlay can instead (or also)
 carry `index-*.jsonl` and `graph-*.jsonl` rows in the dataset's format; see
-[`example/`](example).
+[`example/`](example). The report says how many edges came from such rows.
 
-Conventions: new files compile in the environment, imports are ones the file
-uses, and a result states how many nodes it added. The scorer does not compile
-anything. For each new node it prints how many original components that node
-touches directly, so a result that comes from one very wide file is easy to
-see. It exits with an error if a submission imports a local module that does
-not exist.
+The scorer does not compile anything. For each new node it prints how many
+original components that node touches directly, so a result that comes from
+one very wide file is easy to see. It exits with an error, and lists what is
+wrong, if a submission overwrites a base file, imports a local module that
+does not exist, ships a proof for no theorem, or has a bad manifest row.
 
 ## Finding a place to start
 
@@ -133,12 +168,12 @@ Two approaches to try first:
 1. **A common ancestor.** Define one general object (for example a
    parameterized mixed-integer program), instantiate it for each paper's model,
    and prove a bridge between each original model and its instance. This moves
-   Benchmark 1. It moves Benchmark 2 once original theorems are derived from
-   the standardized ones.
+   Benchmark 1. It moves Benchmark 2 once original theorems have new proofs
+   that derive them from the standardized ones.
 2. **Decompose long proofs.** 5,131 accepted solutions are over 500 lines.
    Extract an argument as a standalone lemma, or match it to an existing node,
-   and refactor the proofs to import it. This moves both benchmarks when proofs
-   from two different components import the same lemma.
+   and give the original theorems new proofs that import it. This moves both
+   benchmarks when proofs from two different components import the same lemma.
 
 ## Limits
 
