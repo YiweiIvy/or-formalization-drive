@@ -50,12 +50,15 @@ cites the root was checked (1,443 pass). Then:
 
 | Action | Count | Rule |
 |---|---:|---|
-| deprecated (`manifest.jsonl`, `replaced_by` = root) | 115 | nothing imports the theorem and it is not a mission goal |
-| new proof shipped (`Sol_<slug>_<n>.lean`) | 26 | the theorem is Open (all 26 are), or joins a component, or links two works |
-| report only | 1,302 | other theorems import it, so deprecating it would cut them off |
+| new proof shipped (`Sol_<slug>_<n>.lean`) | 62 | the theorem is Open (29 are), or joins a component, or links two works |
+| report only | 1,381 | a new proof would add nothing |
 
-All 115 deprecated theorems are mission members or milestones in `seeds.json`; on Prove2Me,
-deprecation would hide them from their missions. That needs a maintainer's decision.
+**Deprecation is proposed, not applied.** 115 of the duplicates are imported by nothing and are not
+mission goals, so deprecating them in favour of their root would disconnect nothing. They are listed
+in `reports/deprecation_candidates.jsonl`, in the row format of `manifest.jsonl`, for maintainers to
+review. All 115 are mission members or milestones in `seeds.json`. On Prove2Me, deprecation hides a
+node from discovery but keeps it importable, so it is reversible archiving, not deletion. Applying
+them (renaming the file to `manifest.jsonl`) gives pair connectivity 40.96% instead of 40.92%.
 
 ## Result
 
@@ -63,15 +66,15 @@ deprecation would hide them from their missions. That needs a maintainer's decis
 
 | | base | submission |
 |---|---:|---:|
-| Pair connectivity | 6.87% | 40.96% |
+| Pair connectivity | 6.87% | 40.92% |
 | `S_reuse` | 36.21% | 36.21% |
 | Mission pair connectivity | 6.51% | 26.25% |
-| Weak components | 3,103 | 2,399 |
-| Largest component | 11,085 | 35,086 |
-| Isolated nodes | 815 | 782 |
+| Weak components | 3,103 | 2,397 |
+| Largest component | 11,085 | 35,143 |
+| Isolated nodes | 815 | 769 |
 
-Cost: 321 new definition files, 1,230 new theorems (all proved), 26 new proofs of original
-theorems, 115 deprecated theorems. Most new theorems are one-line `rfl` bridges; no new node
+Cost: 321 new definition files, 1,230 new theorems (all proved), 62 new proofs of original
+theorems, no deprecations. Most new theorems are one-line `rfl` bridges; no new node
 touches more than two original components directly.
 
 `S_reuse` does not move: bridges import the originals, so they are in no mission's cone. Moving it
@@ -84,6 +87,7 @@ needs original solutions refactored to cite shared lemmas (planned).
 - `reports/common_definitions.jsonl`: each common definition file, with the local copies it replaces.
 - `reports/near_duplicate_bridges.jsonl`: each near-duplicate pair and the proof used.
 - `reports/duplicate_theorems.jsonl`: every duplicate theorem, its root and the action taken.
+- `reports/deprecation_candidates.jsonl`: the 115 proposed deprecations (not applied).
 
 These are the deprecation candidates for a later cleanup: once the theorems that import a local
 copy are re-proved on the common definition, the local copy can be deprecated without cutting
