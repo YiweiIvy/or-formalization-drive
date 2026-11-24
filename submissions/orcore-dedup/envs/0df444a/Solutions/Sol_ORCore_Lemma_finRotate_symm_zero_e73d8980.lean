@@ -2,7 +2,6 @@
 -- Graph-refinement submission: the proof is the helper lemma `finRotate_symm_zero` of Sol_AggNash_Existence_proposition_2_4.lean (@Nickrobbins95), unchanged.
 
 import Mathlib
-import Definitions.Def_AggNash_Existence_Model
 
 open Finset
 open scoped Classical

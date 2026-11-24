@@ -9,9 +9,8 @@
 --   It imports the definitions its statement uses. Here it is stated once; the refactored solutions of this submission cite it.
 
 import Mathlib
-import Definitions.Def_RobustUncLP_WorstCase_Setting
 
-open Matrix RobustUncLP.WorstCase
+open Matrix
 
 namespace ORCore.Lemma
 

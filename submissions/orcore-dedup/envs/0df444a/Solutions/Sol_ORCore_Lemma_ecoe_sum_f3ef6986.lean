@@ -2,10 +2,8 @@
 -- Graph-refinement submission: the proof is the helper lemma `ecoe_sum` of Sol_DRConvexOpt_InfConv_theorem_3.lean (@carlok), unchanged.
 
 import Mathlib
-import Definitions.Def_DRConvexOpt_InfConv_Setting
 
 open MeasureTheory Matrix Filter Topology
-open DRConvexOpt.InfConv
 
 theorem solution {ι : Type*} (s : Finset ι) (f : ι → ℝ) :
     ((∑ i ∈ s, f i : ℝ) : EReal) = ∑ i ∈ s, ((f i : ℝ) : EReal) := by

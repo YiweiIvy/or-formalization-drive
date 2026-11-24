@@ -2,7 +2,6 @@
 -- Graph-refinement submission: the proof is the helper lemma `kot_pow_nonneg` of Sol_KallenbergLP_OptTransient_extreme_optimal_yields_pure_policy.lean (@mrfancypants), unchanged.
 
 import Mathlib
-import Definitions.Def_KallenbergLP_OptTransient_LinearProgram
 
 open Classical
 open Matrix

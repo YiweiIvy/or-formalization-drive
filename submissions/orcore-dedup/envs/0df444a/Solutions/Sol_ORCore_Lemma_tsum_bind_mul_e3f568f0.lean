@@ -2,8 +2,6 @@
 -- Graph-refinement submission: the proof is the helper lemma `tsum_bind_mul` of Sol_KellyStochasticNetworks_MaxWeight_positive_recurrence.lean (@fizzyinc3), unchanged.
 
 import Mathlib
-import Definitions.Def_KellyStochasticNetworks_MaxWeight_Network
-import Theorems.Thm_KellyStochasticNetworks_MaxWeight_poisson_envelope_moments
 
 open scoped ENNReal
 open Classical
@@ -16,7 +14,6 @@ open Classical
 open MeasureTheory ProbabilityTheory
 open scoped ENNReal NNReal
 open Classical
-open KellyStochasticNetworks.MaxWeight
 
 theorem solution {α β : Type*} (p : PMF α) (h : α → PMF β) (f : β → ℝ≥0∞) :
     ∑' j, (p.bind h) j * f j = ∑' a, p a * ∑' j, h a j * f j := by

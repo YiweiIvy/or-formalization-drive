@@ -2,7 +2,6 @@
 -- Graph-refinement submission: the proof is the helper lemma `ite_eq_left` of Sol_OAI_MatchingEntropyBounds_Refined_pointwise_entropy.lean (@dbenbenn), unchanged.
 
 import Mathlib
-import Definitions.Def_MatchingEntropyBounds
 
 
 theorem solution {α : Sort _} {p : Prop} {_ : Decidable p} {a b : α} (h : p) :

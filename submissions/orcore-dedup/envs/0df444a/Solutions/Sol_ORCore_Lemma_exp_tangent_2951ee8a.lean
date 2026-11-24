@@ -2,7 +2,6 @@
 -- Graph-refinement submission: the proof is the helper lemma `exp_tangent` of Sol_AddictivePlatforms_Costly_lemma_D_3.lean (@tianyipeng), unchanged.
 
 import Mathlib
-import Definitions.Def_AddictivePlatforms_Costly_Model
 
 open Set Filter Topology
 open scoped ENNReal

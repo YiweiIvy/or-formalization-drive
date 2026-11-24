@@ -9,12 +9,8 @@
 --   It imports the definitions its statement uses. Here it is stated once; the refactored solutions of this submission cite it.
 
 import Mathlib
-import Definitions.Def_ModernConvex_Relaxations_SignRelaxations
-import Theorems.Thm_ModernConvex_Relaxations_opt_ge_asin_bound
-import Theorems.Thm_ModernConvex_Relaxations_asin_matrix_ge
 
 open Matrix
-open ModernConvex.Relaxations
 
 namespace ORCore.Lemma
 

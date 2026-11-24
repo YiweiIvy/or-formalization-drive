@@ -2,7 +2,6 @@
 -- Graph-refinement submission: the proof is the helper lemma `p0d2_exp_Iic` of Sol_InventoryControl_rq_policy_lower_bound.lean (@Nickrobbins95), unchanged.
 
 import Mathlib
-import Definitions.Def_InventoryControl_rqPolicy
 
 
 open MeasureTheory ProbabilityTheory in

@@ -2,13 +2,9 @@
 -- Graph-refinement submission: the proof is the helper lemma `integrable_expMeasure_id` of Sol_EndogBudgetAds_Equilibrium_theorem_1.lean (@tianyipeng), unchanged.
 
 import Mathlib
-import Definitions.Def_EndogBudgetAds_Equilibrium_Model
-import Theorems.Thm_EndogBudgetAds_Equilibrium_lemma_5
-import Theorems.Thm_EndogBudgetAds_Equilibrium_lemma_16
-import Theorems.Thm_EndogBudgetAds_Equilibrium_lemma_17
 
 open MeasureTheory
-open EndogBudgetAds.Equilibrium ProbabilityTheory
+open ProbabilityTheory
 
 theorem solution {r : ℝ} (hr : 0 < r) :
     Integrable (fun x : ℝ => x) (expMeasure r) := by

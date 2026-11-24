@@ -2,11 +2,10 @@
 -- Graph-refinement submission: `EmpiricalDRO.Consistency.lemma3_max_abs_little_o` has the same statement as `EmpiricalDRO.Coverage.lemma3_max_abs_little_o`; this proof cites it.
 
 import Mathlib
-import Definitions.Def_EmpiricalDRO_Consistency_Setting
 import Theorems.Thm_EmpiricalDRO_Coverage_lemma3_max_abs_little_o
 
 open MeasureTheory ProbabilityTheory Filter Topology
-open EmpiricalDRO EmpiricalDRO.Consistency
+open EmpiricalDRO
 
 theorem solution {Ω : Type*} [MeasurableSpace Ω] {P : Measure Ω}
     [IsProbabilityMeasure P] (Y : ℕ → Ω → ℝ) (hY : ∀ i, Measurable (Y i))

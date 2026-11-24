@@ -9,16 +9,10 @@
 --   It imports the definitions its statement uses. Here it is stated once; the refactored solutions of this submission cite it.
 
 import Mathlib
-import Definitions.Def_SAGA_Convex_IsProxPoint
-import Definitions.Def_BnBPEP_WeakCvx_IsWeakSubgrad
-import Definitions.Def_BnBPEP_WeakCvx_InWeakClass
-import Definitions.Def_BnBPEP_WeakCvx_moreauEnv
 
 open scoped BigOperators
 open Filter Set
-open BnBPEP.WeakCvx
 open Set
-open BnBPEP.WeakCvx
 open Filter Set
 open scoped BigOperators
 

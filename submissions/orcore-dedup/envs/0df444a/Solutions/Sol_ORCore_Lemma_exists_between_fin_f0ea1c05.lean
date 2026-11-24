@@ -2,9 +2,8 @@
 -- Graph-refinement submission: the proof is the helper lemma `exists_between_fin` of Sol_RobustUncLP_WorstCase_proposition_2_1.lean (@Nickrobbins95), unchanged.
 
 import Mathlib
-import Definitions.Def_RobustUncLP_WorstCase_Setting
 
-open Matrix RobustUncLP.WorstCase
+open Matrix
 
 theorem solution {ι : Type} (s r : Finset ι) (L U : ι → ℝ)
     (h : ∀ q ∈ s, ∀ p ∈ r, L q ≤ U p) :

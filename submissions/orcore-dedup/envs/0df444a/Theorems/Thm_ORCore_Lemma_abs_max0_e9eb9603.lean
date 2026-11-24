@@ -9,16 +9,12 @@
 --   It imports the definitions its statement uses. Here it is stated once; the refactored solutions of this submission cite it.
 
 import Mathlib
-import Definitions.Def_SupportVectorMachines_Classification_RiskBasics
-import Definitions.Def_SupportVectorMachines_Classification_ClassificationLosses
-import Definitions.Def_SupportVectorMachines_Classification_RKHSAndSVM
 
 open MeasureTheory
 open MeasureTheory
 open scoped ProbabilityTheory
 open MeasureTheory Filter Topology
 open MeasureTheory Filter Topology
-open SupportVectorMachines.Classification
 
 namespace ORCore.Lemma
 

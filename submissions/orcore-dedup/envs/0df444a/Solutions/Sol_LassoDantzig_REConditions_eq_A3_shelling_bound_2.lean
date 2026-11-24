@@ -4,7 +4,6 @@
 
 import Mathlib
 import Definitions.Def_LassoDantzig_REConditions_RE
-import Definitions.Def_LassoDantzig_REConditions_RestrictedEigenvalues
 import Theorems.Thm_ORCore_Lemma_l1On_nonneg_bd3e91c5
 
 namespace LassoDantzig.REConditions

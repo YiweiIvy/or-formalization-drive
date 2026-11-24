@@ -4,7 +4,6 @@
 
 import Mathlib
 import Definitions.Def_BurerMonteiro_RankIncrease_SDP
-import Definitions.Def_ProjLikeRetr_Spectral_SpectralSet
 import Definitions.Def_PatakiRank_Mult_Setting
 import Theorems.Thm_ORCore_Lemma_pref_card_f0619e98
 

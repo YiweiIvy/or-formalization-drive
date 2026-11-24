@@ -2,7 +2,6 @@
 -- Graph-refinement submission: the proof is the helper lemma `scalar_descent` of Sol_HighResODE_NAGC_theorem_6.lean (@sometik179), unchanged.
 
 import Mathlib
-import Definitions.Def_HighResODE_NAGC_Setting
 
 
 theorem solution (f f' : ℝ → ℝ) (L : ℝ) (hd : ∀ z, HasDerivAt f (f' z) z)

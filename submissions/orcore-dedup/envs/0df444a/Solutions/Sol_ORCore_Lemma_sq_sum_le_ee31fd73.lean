@@ -2,7 +2,6 @@
 -- Graph-refinement submission: the proof is the helper lemma `sq_sum_le` of Sol_CohenLeeSongLP_StochCentralPath_potential_expected_decrease_2.lean (@Nickrobbins95), unchanged.
 
 import Mathlib
-import Definitions.Def_CohenLeeSongLP_StochCentralPath_Main
 
 open MeasureTheory ProbabilityTheory
 open MeasureTheory ProbabilityTheory

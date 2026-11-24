@@ -9,9 +9,7 @@
 --   It imports the definitions its statement uses. Here it is stated once; the refactored solutions of this submission cite it.
 
 import Mathlib
-import Definitions.Def_RegretBandits_Nonlinear_Smoothing
 import Definitions.Def_RegretBandits_Nonlinear_OSGD
-import Definitions.Def_BanditGD_Regret_Setting
 
 open MeasureTheory Set Metric RegretBandits.Nonlinear
 

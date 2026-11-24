@@ -2,9 +2,6 @@
 -- Graph-refinement submission: the proof is the helper lemma `vertex_mem_P` of Sol_Grunbaum2003_neighborly_subpolytope_rigidity.lean (@kmehltretter82), unchanged.
 
 import Mathlib
-import Definitions.Def_Grunbaum2003_IsDPolytope
-import Definitions.Def_Grunbaum2003_PolytopeFace
-import Definitions.Def_Grunbaum2003_IsKNeighborly
 
 open scoped BigOperators
 

@@ -9,12 +9,9 @@
 --   It imports the definitions its statement uses. Here it is stated once; the refactored solutions of this submission cite it.
 
 import Mathlib
-import Definitions.Def_SennottDP_ContinuousTime_ApproxSeq
-import Definitions.Def_SennottDP_ContinuousTime_CTMDC
 
 open scoped ENNReal
 open Filter Topology MeasureTheory ProbabilityTheory
-open SennottDP.ContinuousTime
 
 namespace ORCore.Lemma
 

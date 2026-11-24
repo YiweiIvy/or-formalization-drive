@@ -2,7 +2,6 @@
 -- Graph-refinement submission: the proof is the helper lemma `g10_log_upper` of Sol_AdaptiveStepIPM_Probabilistic_lemma_7.lean (@mrfancypants), unchanged.
 
 import Mathlib
-import Definitions.Def_AdaptiveStepIPM_Probabilistic_Model
 
 open MeasureTheory ProbabilityTheory Filter
 

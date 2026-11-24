@@ -2,8 +2,6 @@
 -- Graph-refinement submission: the proof is the helper lemma `sum_successive_sub` of Sol_GeometryOfGraphs_FlowCut_theorem_4_1_2.lean (@sometik179), unchanged.
 
 import Mathlib
-import Definitions.Def_GeometryOfGraphs_FlowCut_Network
-import Definitions.Def_GeometryOfGraphs_FlowCut_Maxflow
 
 open scoped BigOperators Classical
 

@@ -2,7 +2,6 @@
 -- Graph-refinement submission: the proof is the helper lemma `exp_neg_le_quad` of Sol_ExploreFirst_Absolute_theorem_2.lean (@Nickrobbins95), unchanged.
 
 import Mathlib
-import Definitions.Def_ExploreFirst_Absolute_Setting
 
 open MeasureTheory ProbabilityTheory InformationTheory
 open scoped ENNReal

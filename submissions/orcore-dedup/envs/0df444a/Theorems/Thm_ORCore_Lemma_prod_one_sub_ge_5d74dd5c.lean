@@ -9,10 +9,8 @@
 --   It imports the definitions its statement uses. Here it is stated once; the refactored solutions of this submission cite it.
 
 import Mathlib
-import Definitions.Def_ComplementsRev_Approx_Setting
 
 universe u irreducible_def n : ℕ := 80 irreducible_def M : ℕ := 4 ^ 100
-open ComplementsRev.Approx
 
 namespace ORCore.Lemma
 

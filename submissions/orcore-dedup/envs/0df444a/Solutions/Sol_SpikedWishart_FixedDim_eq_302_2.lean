@@ -4,7 +4,6 @@
 
 import Mathlib
 import Definitions.Def_SpikedWishart_Separated_Model
-import Definitions.Def_SpikedWishart_Separated_GUE
 import Definitions.Def_SpikedWishart_FixedDim_Model
 import Definitions.Def_SpikedWishart_FixedDim_GUE
 import Definitions.Def_SpikedWishart_FixedDim_Laguerre

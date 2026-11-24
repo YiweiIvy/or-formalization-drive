@@ -2,9 +2,6 @@
 -- Graph-refinement submission: the proof is the helper lemma `exposedFace_eq_convexHull_incident_range` of Sol_Grunbaum2003_auto_GRU_M05_EFFECTIVE_TYPES_exists_schemeRealizes_iff_arithmetic_certificates.lean (@kmehltretter82), unchanged.
 
 import Mathlib
-import Definitions.Def_auto_GRU_M05_EFFECTIVE_TYPES_IsDPolytope
-import Definitions.Def_auto_GRU_M05_EFFECTIVE_TYPES_PolytopeFace
-import Definitions.Def_auto_GRU_M05_EFFECTIVE_TYPES_SchemeRealizes
 
 open scoped BigOperators
 

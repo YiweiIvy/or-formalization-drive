@@ -9,7 +9,6 @@
 --   It imports the definitions its statement uses. Here it is stated once; the refactored solutions of this submission cite it.
 
 import Mathlib
-import Definitions.Def_KallenbergLP_OptTransient_LinearProgram
 
 open Classical
 open Matrix

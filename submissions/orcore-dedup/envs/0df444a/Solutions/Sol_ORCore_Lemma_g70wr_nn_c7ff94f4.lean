@@ -2,9 +2,7 @@
 -- Graph-refinement submission: the proof is the helper lemma `g70wr_nn` of Sol_WrightPDIPM_Termination_lemma_5_13.lean (@fizzyinc3), unchanged.
 
 import Mathlib
-import Definitions.Def_WrightPDIPM_Termination_Setup
 
-open WrightPDIPM.Termination
 open Matrix
 
 theorem solution {n : ℕ} (s x : Fin n → ℝ) (hs : ∀ j, 0 ≤ s j) (hx : ∀ j, 0 ≤ x j) :

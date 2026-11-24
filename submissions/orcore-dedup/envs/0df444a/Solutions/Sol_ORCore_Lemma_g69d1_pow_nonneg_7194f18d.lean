@@ -2,10 +2,8 @@
 -- Graph-refinement submission: the proof is the helper lemma `g69d1_pow_nonneg` of Sol_MatrixAnalytic_PH_absorption_iff_nonsingular.lean (@fizzyinc3), unchanged.
 
 import Mathlib
-import Definitions.Def_MatrixAnalytic_PH_Continuous
 
 open Matrix
-open MatrixAnalytic.PH
 open scoped Norms.Operator
 open MeasureTheory Filter Topology
 

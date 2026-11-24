@@ -9,10 +9,8 @@
 --   It imports the definitions its statement uses. Here it is stated once; the refactored solutions of this submission cite it.
 
 import Mathlib
-import Definitions.Def_RLPBidPrice_Unbiased_Model
-import Definitions.Def_ResolvingNRM_IRT_Model
 
-open RLPBidPrice.Unbiased Matrix ResolvingNRM.IRT Finset
+open Matrix Finset
 
 namespace ORCore.Lemma
 

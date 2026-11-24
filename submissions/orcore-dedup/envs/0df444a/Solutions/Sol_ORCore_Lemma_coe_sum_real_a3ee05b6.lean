@@ -2,7 +2,6 @@
 -- Graph-refinement submission: the proof is the helper lemma `coe_sum_real` of Sol_SDCA_Smooth_theorem_2.lean (@sometik179), unchanged.
 
 import Mathlib
-import Definitions.Def_SDCA_Smooth_Model
 
 open scoped InnerProductSpace
 

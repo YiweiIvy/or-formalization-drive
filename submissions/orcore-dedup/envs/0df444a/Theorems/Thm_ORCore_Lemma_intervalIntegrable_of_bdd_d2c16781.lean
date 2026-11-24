@@ -9,11 +9,9 @@
 --   It imports the definitions its statement uses. Here it is stated once; the refactored solutions of this submission cite it.
 
 import Mathlib
-import Definitions.Def_OpRiskInspection_RandomVsPeriodic_Setting
 
 open MeasureTheory Set
 open scoped ENNReal
-open OpRiskInspection.RandomVsPeriodic
 
 namespace ORCore.Lemma
 

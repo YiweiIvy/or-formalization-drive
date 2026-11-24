@@ -2,8 +2,6 @@
 -- Graph-refinement submission: the proof is the helper lemma `norm_prod_sub_prod_le` of Sol_SpikedWishart_Separated_gaussian_sesquilinear_form_clt.lean (@Nickrobbins95), unchanged.
 
 import Mathlib
-import Definitions.Def_SpikedWishart_Separated_Model
-import Definitions.Def_SpikedWishart_Separated_GUE
 
 open Filter Topology MeasureTheory Matrix
 open scoped ComplexOrder

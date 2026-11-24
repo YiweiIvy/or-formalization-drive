@@ -2,10 +2,8 @@
 -- Graph-refinement submission: the proof is the helper lemma `OLW_exp_le` of Sol_OnlineLearningOCO_Winnow_theorem_3_10.lean (@vebis), unchanged.
 
 import Mathlib
-import Definitions.Def_OnlineLearningOCO_Winnow_Winnow
 
 open Finset
-open OnlineLearningOCO.Winnow
 
 theorem solution (x : ℝ) (hx : x ≤ 1) : Real.exp x ≤ 1 + x + x ^ 2 := by
   by_cases h : |x| ≤ 1

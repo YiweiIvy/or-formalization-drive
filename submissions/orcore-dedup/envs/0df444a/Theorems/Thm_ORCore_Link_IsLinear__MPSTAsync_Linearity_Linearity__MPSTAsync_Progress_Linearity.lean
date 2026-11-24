@@ -8,8 +8,6 @@
 --   This theorem states that they are equal as functions.
 
 import Mathlib
-import Definitions.Def_MPSTAsync_Progress_Linearity
-import Definitions.Def_MPSTAsync_Linearity_Linearity
 
 theorem ORCore.Link.IsLinear__MPSTAsync_Linearity_Linearity__MPSTAsync_Progress_Linearity :
     @IsLinear = @IsLinear := by sorry

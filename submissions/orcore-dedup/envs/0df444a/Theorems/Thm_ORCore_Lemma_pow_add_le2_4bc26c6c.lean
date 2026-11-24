@@ -9,11 +9,9 @@
 --   It imports the definitions its statement uses. Here it is stated once; the refactored solutions of this submission cite it.
 
 import Mathlib
-import Definitions.Def_FedergruenZipkin_AvgCost_Model
 
 open Filter Topology Asymptotics
 open scoped ENNReal
-open FedergruenZipkin.AvgCost
 
 namespace ORCore.Lemma
 

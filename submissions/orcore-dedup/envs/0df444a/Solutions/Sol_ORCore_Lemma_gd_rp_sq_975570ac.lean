@@ -2,9 +2,6 @@
 -- Graph-refinement submission: the proof is the helper lemma `gd_rp_sq` of Sol_CubicNewton_GradDom_theorem7.lean (@mrfancypants), unchanged.
 
 import Mathlib
-import Definitions.Def_CubicNewton_Shared_IsCubicNewtonRun
-import Definitions.Def_CubicNewton_GradDom_IsGradDominated2
-import Definitions.Def_CubicNewton_GradDom_omegaTilde
 
 open scoped RealInnerProductSpace
 

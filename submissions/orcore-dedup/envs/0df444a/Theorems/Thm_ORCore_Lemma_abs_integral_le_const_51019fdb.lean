@@ -9,10 +9,8 @@
 --   It imports the definitions its statement uses. Here it is stated once; the refactored solutions of this submission cite it.
 
 import Mathlib
-import Definitions.Def_PoissonDepTrials_SecondOrder_Setting
 
 open MeasureTheory ProbabilityTheory Finset
-open PoissonDepTrials.SecondOrder
 
 namespace ORCore.Lemma
 

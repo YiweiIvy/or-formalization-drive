@@ -2,7 +2,6 @@
 -- Graph-refinement submission: the proof is the helper lemma `norm_le_norm_of_coord` of Sol_ReflNewton_FirstOrder_theorem_8.lean (@Nickrobbins95), unchanged.
 
 import Mathlib
-import Definitions.Def_LewisTorczon_BoundPS_Box
 import Definitions.Def_ReflNewton_FirstOrder_Setting
 
 open Filter Topology

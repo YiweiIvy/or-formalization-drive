@@ -3,7 +3,6 @@
 -- The rest of the proof is the accepted solution, unchanged.
 
 import Mathlib
-import Definitions.Def_BiconvexProg_BranchBound_convexEnvelope
 import Definitions.Def_PandemicInfo_Inequality_Model
 import Definitions.Def_PandemicInfo_Inequality_Reduced
 import Theorems.Thm_ORCore_Lemma_iint_congr_Ioo_921d2156

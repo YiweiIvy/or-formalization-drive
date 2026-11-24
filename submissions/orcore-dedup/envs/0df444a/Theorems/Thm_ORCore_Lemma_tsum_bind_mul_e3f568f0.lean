@@ -9,8 +9,6 @@
 --   It imports the definitions its statement uses. Here it is stated once; the refactored solutions of this submission cite it.
 
 import Mathlib
-import Definitions.Def_KellyStochasticNetworks_MaxWeight_Network
-import Theorems.Thm_KellyStochasticNetworks_MaxWeight_poisson_envelope_moments
 
 open scoped ENNReal
 open Classical
@@ -23,7 +21,6 @@ open Classical
 open MeasureTheory ProbabilityTheory
 open scoped ENNReal NNReal
 open Classical
-open KellyStochasticNetworks.MaxWeight
 
 namespace ORCore.Lemma
 

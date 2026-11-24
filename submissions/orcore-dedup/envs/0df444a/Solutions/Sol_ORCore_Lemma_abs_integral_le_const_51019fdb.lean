@@ -2,10 +2,8 @@
 -- Graph-refinement submission: the proof is the helper lemma `abs_integral_le_const` of Sol_PoissonDepTrials_SecondOrder_theorem_5_1.lean (@Nickrobbins95), unchanged.
 
 import Mathlib
-import Definitions.Def_PoissonDepTrials_SecondOrder_Setting
 
 open MeasureTheory ProbabilityTheory Finset
-open PoissonDepTrials.SecondOrder
 
 theorem solution {Ω : Type*} [MeasurableSpace Ω] (P : Measure Ω)
     [IsProbabilityMeasure P] (f : Ω → ℝ) (C : ℝ) (hf : ∀ ω, |f ω| ≤ C) :

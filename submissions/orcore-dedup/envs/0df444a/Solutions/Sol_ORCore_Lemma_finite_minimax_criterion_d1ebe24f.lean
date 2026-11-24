@@ -2,7 +2,6 @@
 -- Graph-refinement submission: the proof is the helper lemma `finite_minimax_criterion` of Sol_MartinetReg_VI_theorem1.lean (@moona3k), unchanged.
 
 import Mathlib
-import Definitions.Def_MartinetReg_VI_Setting
 
 open Filter Topology Finset
 

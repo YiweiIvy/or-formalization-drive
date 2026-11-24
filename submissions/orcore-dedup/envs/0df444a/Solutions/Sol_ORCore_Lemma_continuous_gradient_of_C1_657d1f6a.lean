@@ -2,7 +2,6 @@
 -- Graph-refinement submission: the proof is the helper lemma `continuous_gradient_of_C1` of Sol_AugLagLLC_KKT_cpld_limit_kkt.lean (@tianyipeng), unchanged.
 
 import Mathlib
-import Definitions.Def_AugLagLLC_KKT_ConstraintQualifications
 
 open Filter Topology
 open scoped InnerProductSpace

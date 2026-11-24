@@ -4,7 +4,6 @@
 
 import Mathlib
 import Definitions.Def_SpikedWishart_Separated_Model
-import Definitions.Def_SpikedWishart_Separated_GUE
 import Theorems.Thm_ORCore_Lemma_norm_prod_sub_prod_le_9b70ad56
 
 set_option autoImplicit false

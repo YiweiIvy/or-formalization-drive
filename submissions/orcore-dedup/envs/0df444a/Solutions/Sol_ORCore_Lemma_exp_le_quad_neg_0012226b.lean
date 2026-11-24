@@ -2,10 +2,8 @@
 -- Graph-refinement submission: the proof is the helper lemma `exp_le_quad_neg` of Sol_MinimaxRegretRL_Bernstein_ucbvi_bf_regret_bound.lean (@Nickrobbins95), unchanged.
 
 import Mathlib
-import Definitions.Def_MinimaxRegretRL_Bernstein_Process
 
 open scoped Classical
-open MinimaxRegretRL.Bernstein
 
 theorem solution (y : ℝ) (hy : y ≤ 0) : Real.exp y ≤ 1 + y + y ^ 2 / 2 := by
   set t := -y with ht

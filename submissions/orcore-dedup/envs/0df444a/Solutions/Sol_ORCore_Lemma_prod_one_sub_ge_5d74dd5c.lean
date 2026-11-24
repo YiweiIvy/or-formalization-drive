@@ -2,10 +2,8 @@
 -- Graph-refinement submission: the proof is the helper lemma `prod_one_sub_ge` of Sol_ComplementsRev_Approx_proposition_4_1.lean (@tianyipeng), unchanged.
 
 import Mathlib
-import Definitions.Def_ComplementsRev_Approx_Setting
 
 universe u irreducible_def n : ℕ := 80 irreducible_def M : ℕ := 4 ^ 100
-open ComplementsRev.Approx
 
 theorem solution {α : Type*} (s : Finset α) (x : α → ℝ) (h0 : ∀ a ∈ s, 0 ≤ x a)
     (h1 : ∀ a ∈ s, x a ≤ 1) : 1 - ∑ a ∈ s, x a ≤ ∏ a ∈ s, (1 - x a) := by

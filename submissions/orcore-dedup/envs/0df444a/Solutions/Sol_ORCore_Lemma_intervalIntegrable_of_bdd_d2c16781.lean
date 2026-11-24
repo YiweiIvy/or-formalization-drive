@@ -2,11 +2,9 @@
 -- Graph-refinement submission: the proof is the helper lemma `intervalIntegrable_of_bdd` of Sol_OpRiskInspection_Hybrid_proposition_5.lean (@Nickrobbins95), unchanged.
 
 import Mathlib
-import Definitions.Def_OpRiskInspection_RandomVsPeriodic_Setting
 
 open MeasureTheory Set
 open scoped ENNReal
-open OpRiskInspection.RandomVsPeriodic
 
 theorem solution (f : ℝ → ℝ) (hf : Measurable f) (C : ℝ)
     (hC : ∀ t, |f t| ≤ C) (a b : ℝ) : IntervalIntegrable f volume a b := by

@@ -2,10 +2,8 @@
 -- Graph-refinement submission: the proof is the helper lemma `grad_diff` of Sol_AdaptiveCubic_FirstOrder_corollary_5_3.lean (@Nickrobbins95), unchanged.
 
 import Mathlib
-import Definitions.Def_AdaptiveCubic_FirstOrder_IsARCSRun
 
 open scoped RealInnerProductSpace
-open AdaptiveCubic.Cauchy
 
 theorem solution {n : ℕ} (f : EuclideanSpace ℝ (Fin n) → ℝ) (hf : ContDiff ℝ 2 f) :
     Differentiable ℝ (gradient f) := by

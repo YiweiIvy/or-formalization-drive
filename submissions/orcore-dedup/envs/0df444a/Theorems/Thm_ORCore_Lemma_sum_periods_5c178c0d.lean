@@ -9,12 +9,9 @@
 --   It imports the definitions its statement uses. Here it is stated once; the refactored solutions of this submission cite it.
 
 import Mathlib
-import Definitions.Def_AIMInventory_Known_AIM
-import Definitions.Def_AIMInventory_Known_Queue
 
 open MeasureTheory
 open scoped NNReal BigOperators
-open CappedBaseStock AIMInventory.Known
 
 namespace ORCore.Lemma
 

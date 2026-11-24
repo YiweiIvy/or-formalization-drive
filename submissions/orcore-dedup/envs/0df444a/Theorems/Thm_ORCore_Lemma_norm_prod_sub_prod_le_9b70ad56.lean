@@ -9,8 +9,6 @@
 --   It imports the definitions its statement uses. Here it is stated once; the refactored solutions of this submission cite it.
 
 import Mathlib
-import Definitions.Def_SpikedWishart_Separated_Model
-import Definitions.Def_SpikedWishart_Separated_GUE
 
 open Filter Topology MeasureTheory Matrix
 open scoped ComplexOrder

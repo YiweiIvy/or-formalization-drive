@@ -9,10 +9,8 @@
 --   It imports the definitions its statement uses. Here it is stated once; the refactored solutions of this submission cite it.
 
 import Mathlib
-import Definitions.Def_MatrixAnalytic_PH_Continuous
 
 open Matrix
-open MatrixAnalytic.PH
 open scoped Norms.Operator
 open MeasureTheory Filter Topology
 

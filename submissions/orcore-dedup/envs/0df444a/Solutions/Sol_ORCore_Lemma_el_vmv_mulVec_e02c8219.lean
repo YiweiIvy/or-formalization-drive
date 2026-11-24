@@ -2,7 +2,6 @@
 -- Graph-refinement submission: the proof is the helper lemma `el_vmv_mulVec` of Sol_ConvexOptAlg_Ellipsoid_theorem_2_4.lean (@mrfancypants), unchanged.
 
 import Mathlib
-import Definitions.Def_ConvexOptAlg_Ellipsoid_Defs
 
 open Matrix MeasureTheory
 

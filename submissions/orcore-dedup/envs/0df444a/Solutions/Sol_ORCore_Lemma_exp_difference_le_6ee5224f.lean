@@ -2,8 +2,6 @@
 -- Graph-refinement submission: the proof is the helper lemma `exp_difference_le` of Sol_OAI_KServer_JointEmbedding_key_bound.lean (@dbenbenn), unchanged.
 
 import Mathlib
-import Definitions.Def_KServer
-import Definitions.Def_OAIQ17Ks000
 
 open scoped BigOperators
 open Finset

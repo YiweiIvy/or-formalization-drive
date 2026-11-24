@@ -2,9 +2,7 @@
 -- Graph-refinement submission: the proof is the helper lemma `perm_exists` of Sol_GeomScoring_Characterization_proposition_4_winners.lean (@tianyipeng), unchanged.
 
 import Mathlib
-import Definitions.Def_GeomScoring_Characterization_Model
 
-open GeomScoring.Characterization
 
 theorem solution {k : ℕ} (a b i j : Fin k) (hab : a ≠ b) (hij : i ≠ j) :
     ∃ σ : Equiv.Perm (Fin k), σ a = i ∧ σ b = j := by

@@ -2,9 +2,7 @@
 -- Graph-refinement submission: the proof is the helper lemma `nearest_inner` of Sol_BanditGD_Regret_eq_10.lean (@Nickrobbins95), unchanged.
 
 import Mathlib
-import Definitions.Def_RegretBandits_Nonlinear_Smoothing
 import Definitions.Def_RegretBandits_Nonlinear_OSGD
-import Definitions.Def_BanditGD_Regret_Setting
 
 open MeasureTheory Set Metric RegretBandits.Nonlinear
 

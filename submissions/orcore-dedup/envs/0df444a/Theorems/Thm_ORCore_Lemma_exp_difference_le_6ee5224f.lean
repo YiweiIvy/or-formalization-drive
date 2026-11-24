@@ -9,8 +9,6 @@
 --   It imports the definitions its statement uses. Here it is stated once; the refactored solutions of this submission cite it.
 
 import Mathlib
-import Definitions.Def_KServer
-import Definitions.Def_OAIQ17Ks000
 
 open scoped BigOperators
 open Finset

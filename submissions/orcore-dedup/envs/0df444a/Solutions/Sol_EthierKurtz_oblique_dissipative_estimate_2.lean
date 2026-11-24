@@ -6,7 +6,6 @@ import Definitions.Def_EthierKurtz_BoundaryCTwiceHolder
 import Definitions.Def_EthierKurtz_BoundaryCOnceHolder
 import Definitions.Def_EthierKurtz_IsOutwardUnitNormal
 import Definitions.Def_EthierKurtz_obliqueDiffusionGraph
-import Definitions.Def_EthierKurtz_IsStronglyContinuousContractionSemigroup
 import Theorems.Thm_ORCore_Lemma_g70slt_inner_eq_a2dfeef8
 
 open Filter

@@ -2,7 +2,6 @@
 -- Graph-refinement submission: the proof is the helper lemma `min_formula` of Sol_TwoSidedMatching_Guarantee_theorem_2.lean (@Nickrobbins95), unchanged.
 
 import Mathlib
-import Definitions.Def_TwoSidedMatching_Guarantee_Market
 
 open MeasureTheory
 

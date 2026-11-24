@@ -2,7 +2,6 @@
 -- Graph-refinement submission: the proof is the helper lemma `rtg_symm` of Sol_CooperationGraphs_FairRule_theorem_3.lean (@mrfancypants), unchanged.
 
 import Mathlib
-import Definitions.Def_CooperationGraphs_FairRule_Basic
 
 open Finset
 open scoped Classical

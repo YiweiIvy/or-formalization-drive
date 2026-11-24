@@ -2,9 +2,8 @@
 -- Graph-refinement submission: the proof is the helper lemma `ivl_int_of_bdd` of Sol_Sherlocking_InfoPolicy_oc0_iff_ineq4.lean (@tianyipeng), unchanged.
 
 import Mathlib
-import Definitions.Def_Sherlocking_InfoPolicy_Model
 
-open MeasureTheory Sherlocking.InfoPolicy
+open MeasureTheory
 
 theorem solution {f : ℝ → ℝ} (hf : Measurable f) (M : ℝ) (hM : ∀ x, |f x| ≤ M) (a b : ℝ) :
     IntervalIntegrable f volume a b := by

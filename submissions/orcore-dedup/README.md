@@ -80,17 +80,22 @@ Many accepted solutions prove the same helper lemma privately, in papers from di
 cite a lemma whose statement uses a same-named definition from another paper; they are dropped.
 `reports/shared_lemmas.jsonl` lists each lemma and the solutions that cite it.
 
+The lemma files first carried over the `import` and `open` lines of the solution they came from.
+Imports a file does not use were then removed (see [Verification](#verification)), which cost
+0.5 points of `S_reuse` (42.25% → 41.71%) and 0.04 points of pair connectivity: those edges
+came from imports, not from use.
+
 ## Result
 
 `python3 benchmark/or_bench.py score --submission submissions/orcore-dedup`
 
 | | base | submission |
 |---|---:|---:|
-| Pair connectivity | 6.87% | 44.31% |
-| `S_reuse` | 36.21% | 42.25% |
-| Mission pair connectivity | 6.51% | 29.92% |
-| Weak components | 3,103 | 2,297 |
-| Largest component | 11,085 | 36,571 |
+| Pair connectivity | 6.87% | 44.27% |
+| `S_reuse` | 36.21% | 41.71% |
+| Mission pair connectivity | 6.51% | 29.86% |
+| Weak components | 3,103 | 2,301 |
+| Largest component | 11,085 | 36,552 |
 | Isolated nodes | 815 | 766 |
 
 Cost: 321 new definition files, 1,353 new theorems (all proved: 1,230 bridges and links, 123 shared
@@ -124,7 +129,7 @@ Lean 4.33.1, Mathlib `0df444a`. All 3,356 Lean files (321 definition files, 1,35
    each file from source together with its real local import closure, and reports every error.
 2. **Standalone check (CONTRIBUTING.md rule 5).**
    - *Compile:* every file is compiled by its own `lean -o` process, in dependency order, against
-     the `.olean`s of what it imports: 5,704 modules (the 3,356 files, the 2,019 snapshot files they
+     the `.olean`s of what it imports: 5,683 modules (the 3,356 files, the 1,998 snapshot files they
      import, and the statement files of the 329 original theorems proved here). All compile.
    - *Axioms:* for each proof's `solution` and each definition, a Lean program walks the
      dependencies through every local constant (this submission's and the snapshot's `Definitions`
@@ -141,8 +146,17 @@ Lean 4.33.1, Mathlib `0df444a`. All 3,356 Lean files (321 definition files, 1,35
      the snapshot marks Disproved. For the other 2, Lean checked `example : <statement> := solution`:
      one solution declares its own `Primcodable` instances, equal by definition to the statement's;
      one disproof refutes a statement about `ι : Type*` at `ι : Type`, like its accepted original.
-
-Not checked yet: that each file imports only what it uses.
+   - *Imports only what it uses:* a Lean program reads each compiled file and flags a dataset import
+     (`Definitions`, `Theorems`, `Solutions`) when no constant of the file refers to a constant
+     declared in it and it is not the only route to a module the file refers to (`lake shake`
+     does this only for files that use the `module` system, which the snapshot does not).
+     `import Mathlib` is kept, as in every snapshot file. Each flagged file was recompiled without
+     the flagged imports; when Lean then reported only an `open` of a namespace declared in a
+     removed import, that namespace was removed from the `open` line too. 312 imports in 231 files
+     were flagged (211 of the files are shared-lemma files, which carried over their source
+     file's imports); 309 are removed, in 228 files. 3 are kept: 2 because Lean rejects the file
+     without them, and 1 that its file uses but also reached through a lemma file whose own copy
+     of that import was removed. Then all checks above were run again on the pruned files.
 
 ## Reproducing
 

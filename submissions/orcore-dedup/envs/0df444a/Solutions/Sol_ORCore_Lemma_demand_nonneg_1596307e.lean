@@ -2,9 +2,8 @@
 -- Graph-refinement submission: the proof is the helper lemma `demand_nonneg` of Sol_SuReturns_PartialRefunds_proposition2_optimal_policy.lean (@miao), unchanged.
 
 import Mathlib
-import Definitions.Def_SuReturns_PartialRefunds_Model
 
-open MeasureTheory ProbabilityTheory SuReturns.PartialRefunds
+open MeasureTheory ProbabilityTheory
 
 theorem solution (D : Measure ℝ) (hD0 : D (Set.Iio 0) = 0) :
     ∀ᵐ x ∂D, 0 ≤ x := by

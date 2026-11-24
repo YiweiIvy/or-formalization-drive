@@ -9,9 +9,7 @@
 --   It imports the definitions its statement uses. Here it is stated once; the refactored solutions of this submission cite it.
 
 import Mathlib
-import Definitions.Def_BiAbduction_Systematic_Rules
 
-open BiAbduction.Systematic
 
 namespace ORCore.Lemma
 

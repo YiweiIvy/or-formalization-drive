@@ -2,7 +2,6 @@
 -- Graph-refinement submission: the proof is the helper lemma `fn_exp_quad_neg` of Sol_NagaevLD_FukNagaev_theorem_1_3.lean (@mrfancypants), unchanged.
 
 import Mathlib
-import Definitions.Def_NagaevLD_FukNagaev_Setting
 
 open MeasureTheory ProbabilityTheory
 open MeasureTheory ProbabilityTheory

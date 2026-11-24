@@ -2,7 +2,6 @@
 -- Graph-refinement submission: the proof is the helper lemma `int_bdd` of Sol_VarianceRegularization_Covering_fixed_function_bernstein.lean (@Nickrobbins95), unchanged.
 
 import Mathlib
-import Definitions.Def_VarianceRegularization_Covering_robustSup
 
 open MeasureTheory ProbabilityTheory
 

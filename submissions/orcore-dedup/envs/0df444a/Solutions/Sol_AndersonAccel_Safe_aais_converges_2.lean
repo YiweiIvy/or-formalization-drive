@@ -3,7 +3,6 @@
 -- The rest of the proof is the accepted solution, unchanged.
 
 import Definitions.Def_AndersonAccel_Safe_IsAAISRun
-import Definitions.Def_AndersonAccel_Safe_windowB
 import Mathlib.Analysis.InnerProductSpace.Spectrum
 import Mathlib.Analysis.InnerProductSpace.Adjoint
 import Mathlib.Analysis.Normed.Operator.Banach

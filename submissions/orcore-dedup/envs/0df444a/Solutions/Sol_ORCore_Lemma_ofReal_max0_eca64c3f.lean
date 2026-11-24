@@ -2,9 +2,7 @@
 -- Graph-refinement submission: the proof is the helper lemma `ofReal_max0` of Sol_RoslingAssembly_SeriesEquiv_lemma1_no_excess_production.lean (@tianyipeng), unchanged.
 
 import Mathlib
-import Definitions.Def_RoslingAssembly_SeriesEquiv_Cost
 
-open RoslingAssembly.SeriesEquiv
 open MeasureTheory
 
 theorem solution (x : ℝ) : ENNReal.ofReal x = ENNReal.ofReal (max x 0) := by

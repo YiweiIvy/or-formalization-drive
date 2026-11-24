@@ -2,7 +2,6 @@
 -- Graph-refinement submission: the proof is the helper lemma `integrable_of_abs_le` of Sol_ModernOnlineLearning_OnlineToBatch_theorem_3_10.lean (@Nickrobbins95), unchanged.
 
 import Mathlib
-import Definitions.Def_ModernOnlineLearning_OnlineToBatch_Defs
 
 open MeasureTheory ProbabilityTheory
 

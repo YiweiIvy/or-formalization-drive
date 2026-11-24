@@ -2,10 +2,8 @@
 -- Graph-refinement submission: the proof is the helper lemma `hasDerivAt_pp_sq` of Sol_StallEconomy_TripLength_proposition_3.lean (@tianyipeng), unchanged.
 
 import Mathlib
-import Definitions.Def_StallEconomy_TripLength_Setting
 
 open MeasureTheory Set
-open StallEconomy.TripLength
 
 theorem solution (u : ℝ) : HasDerivAt (fun y : ℝ => (max y 0) ^ 2 / 2) (max u 0) u := by
   rcases lt_trichotomy u 0 with hu | hu | hu

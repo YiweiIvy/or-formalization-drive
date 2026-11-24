@@ -9,13 +9,9 @@
 --   It imports the definitions its statement uses. Here it is stated once; the refactored solutions of this submission cite it.
 
 import Mathlib
-import Definitions.Def_EndogBudgetAds_Equilibrium_Model
-import Theorems.Thm_EndogBudgetAds_Equilibrium_lemma_5
-import Theorems.Thm_EndogBudgetAds_Equilibrium_lemma_16
-import Theorems.Thm_EndogBudgetAds_Equilibrium_lemma_17
 
 open MeasureTheory
-open EndogBudgetAds.Equilibrium ProbabilityTheory
+open ProbabilityTheory
 
 namespace ORCore.Lemma
 

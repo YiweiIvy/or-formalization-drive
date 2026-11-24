@@ -9,10 +9,7 @@
 --   It imports the definitions its statement uses. Here it is stated once; the refactored solutions of this submission cite it.
 
 import Mathlib
-import Definitions.Def_CoherentSDDP_Inner_Basic
-import Definitions.Def_CoherentSDDP_Inner_Model
 
-open CoherentSDDP.Inner
 
 namespace ORCore.Lemma
 

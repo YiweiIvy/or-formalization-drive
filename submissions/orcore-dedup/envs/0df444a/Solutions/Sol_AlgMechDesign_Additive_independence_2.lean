@@ -3,7 +3,6 @@
 
 import Mathlib
 import Definitions.Def_AlgMechDesign_Additive_Model
-import Definitions.Def_AlgMechDesign_Additive_Price
 import Theorems.Thm_AlgMechDesign_LowerBound_independence
 
 open AlgMechDesign AlgMechDesign.Additive

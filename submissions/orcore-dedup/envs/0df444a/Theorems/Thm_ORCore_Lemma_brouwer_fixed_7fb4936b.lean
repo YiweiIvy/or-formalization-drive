@@ -9,7 +9,6 @@
 --   It imports the definitions its statement uses. Here it is stated once; the refactored solutions of this submission cite it.
 
 import Mathlib
-import Theorems.Thm_Brouwer_exists_fixedPoint_euclideanSpace
 
 open Metric Set MeasureTheory
 

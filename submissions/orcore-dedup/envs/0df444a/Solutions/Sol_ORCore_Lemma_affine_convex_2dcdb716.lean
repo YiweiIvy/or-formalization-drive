@@ -2,7 +2,6 @@
 -- Graph-refinement submission: the proof is the helper lemma `affine_convex` of Sol_MartOT_Opt_theorem_5_3.lean (@Nickrobbins95), unchanged.
 
 import Mathlib
-import Definitions.Def_MartOT_Var_Setting
 
 open MeasureTheory Filter Topology
 

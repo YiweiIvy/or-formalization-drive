@@ -2,7 +2,6 @@
 -- Graph-refinement submission: the proof is the helper lemma `bern_nonneg` of Sol_CPDNetworks_Lower_theorem_2.lean (@Nickrobbins95), unchanged.
 
 import Mathlib
-import Definitions.Def_HighDimProb_RandomMatrices_matrixOpNorm
 import Definitions.Def_CPDNetworks_Lower_Setting
 
 open CPDNetworks.Lower HighDimProb.RandomMatrices

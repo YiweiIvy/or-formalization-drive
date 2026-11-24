@@ -10,9 +10,6 @@
 
 import Mathlib
 import Definitions.Def_MPECRelax_ScholtesConv_NLP
-import Definitions.Def_MPECRelax_ScholtesConv_MPEC
-import Definitions.Def_MPECRelax_ScholtesConv_Scholtes
-import Theorems.Thm_MPECRelax_ScholtesConv_mpec_mfcq_posLinIndep
 
 open Filter Topology
 open MPECRelax.ScholtesConv

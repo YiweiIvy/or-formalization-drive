@@ -2,7 +2,6 @@
 -- Graph-refinement submission: the proof is the helper lemma `ereal_neg_iSup'` of Sol_DualityStability_WeakDuality_hull_conjugate_identity.lean (@tianyipeng), unchanged.
 
 import Mathlib
-import Definitions.Def_DualityStability_WeakDuality_Problem
 
 open Filter Topology
 

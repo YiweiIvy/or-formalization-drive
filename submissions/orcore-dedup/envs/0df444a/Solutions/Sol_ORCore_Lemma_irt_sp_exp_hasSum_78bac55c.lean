@@ -2,10 +2,8 @@
 -- Graph-refinement submission: the proof is the helper lemma `irt_sp_exp_hasSum` of Sol_ResolvingNRM_IRT_spa_dlp_gap_sqrt.lean (@tianyipeng), unchanged.
 
 import Mathlib
-import Definitions.Def_RLPBidPrice_Unbiased_Model
-import Definitions.Def_ResolvingNRM_IRT_Model
 
-open RLPBidPrice.Unbiased Matrix ResolvingNRM.IRT Finset
+open Matrix Finset
 
 theorem solution (x : ℝ) :
     HasSum (fun n : ℕ => x ^ n / (n.factorial : ℝ)) (Real.exp x) := by

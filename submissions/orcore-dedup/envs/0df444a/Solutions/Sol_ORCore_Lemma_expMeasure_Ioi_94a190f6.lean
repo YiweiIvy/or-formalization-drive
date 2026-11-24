@@ -2,7 +2,6 @@
 -- Graph-refinement submission: the proof is the helper lemma `expMeasure_Ioi` of Sol_SpecActionsProb_Latency_proposition_1.lean (@frknbls), unchanged.
 
 import Mathlib
-import Definitions.Def_SpecActionsProb_Latency_Model
 
 open MeasureTheory ProbabilityTheory Set
 

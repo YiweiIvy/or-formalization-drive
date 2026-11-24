@@ -2,10 +2,8 @@
 -- Graph-refinement submission: the proof is the helper lemma `iint_congr_Ioo` of Sol_ConservativeAD_GradAE_theorem_1.lean (@Nickrobbins95), unchanged.
 
 import Mathlib
-import Definitions.Def_ConservativeAD_GradAE_ConservativeField
 
 open MeasureTheory
-open ConservativeAD.GradAE
 
 theorem solution {F G : ℝ → ℝ} {a b : ℝ} (hab : a ≤ b)
     (h : ∀ t ∈ Set.Ioo a b, F t = G t) :

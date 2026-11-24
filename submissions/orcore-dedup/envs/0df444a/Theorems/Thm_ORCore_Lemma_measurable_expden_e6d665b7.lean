@@ -9,11 +9,8 @@
 --   It imports the definitions its statement uses. Here it is stated once; the refactored solutions of this submission cite it.
 
 import Mathlib
-import Definitions.Def_SmithRegenerative_Equilibrium_Renewal
 
 open MeasureTheory Filter Topology
-open QueueingFundamentals.MG1
-open SmithRegenerative.Equilibrium
 
 namespace ORCore.Lemma
 

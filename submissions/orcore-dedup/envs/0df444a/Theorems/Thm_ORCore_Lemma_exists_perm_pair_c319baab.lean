@@ -9,9 +9,8 @@
 --   It imports the definitions its statement uses. Here it is stated once; the refactored solutions of this submission cite it.
 
 import Mathlib
-import Definitions.Def_JointMixND_QuadOT_Problems
 
-open MeasureTheory ProbabilityTheory JointMixND.QuadOT
+open MeasureTheory ProbabilityTheory
 
 namespace ORCore.Lemma
 

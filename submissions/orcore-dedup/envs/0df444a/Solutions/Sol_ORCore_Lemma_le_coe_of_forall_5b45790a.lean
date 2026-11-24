@@ -2,10 +2,7 @@
 -- Graph-refinement submission: the proof is the helper lemma `le_coe_of_forall` of Sol_CoherentSDDP_Inner_proposition_5.lean (@carlok), unchanged.
 
 import Mathlib
-import Definitions.Def_CoherentSDDP_Inner_Basic
-import Definitions.Def_CoherentSDDP_Inner_Model
 
-open CoherentSDDP.Inner
 
 theorem solution {X : EReal} {a : ℝ} (h : ∀ ε : ℝ, 0 < ε → X ≤ ((a + ε : ℝ) : EReal)) :
     X ≤ (a : EReal) := by

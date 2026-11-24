@@ -2,11 +2,9 @@
 -- Graph-refinement submission: the proof is the helper lemma `convex_fderiv_support` of Sol_NesterovODE_Restart_theorem_10.lean (@sometik179), unchanged.
 
 import Mathlib
-import Definitions.Def_NesterovODE_Restart_Setting
 
-open Set NesterovODE.WellPosed
+open Set
 open scoped RealInnerProductSpace
-open NesterovODE.StrongCvx
 
 theorem solution {F : Type*} [NormedAddCommGroup F] [NormedSpace ℝ F]
     {f : F → ℝ} (hc : ConvexOn ℝ Set.univ f) (x y : F)

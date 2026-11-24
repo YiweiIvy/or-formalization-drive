@@ -9,8 +9,6 @@
 --   It imports the definitions its statement uses. Here it is stated once; the refactored solutions of this submission cite it.
 
 import Mathlib
-import Definitions.Def_SmithRegenerative_Ergodic_Renewal
-import Definitions.Def_SmithRegenerative_Ergodic_CumulativeProcess
 
 open MeasureTheory ProbabilityTheory Filter Topology
 

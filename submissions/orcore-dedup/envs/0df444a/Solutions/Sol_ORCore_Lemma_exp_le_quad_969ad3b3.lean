@@ -2,7 +2,6 @@
 -- Graph-refinement submission: the proof is the helper lemma `exp_le_quad` of Sol_ObfImpossibility_PseudoOracle_lemma_B_1.lean (@Nickrobbins95), unchanged.
 
 import Mathlib
-import Definitions.Def_ObfImpossibility_PseudoOracle_Setting
 
 
 theorem solution (x : ℝ) (hx : |x| ≤ 1) : Real.exp x ≤ 1 + x + x ^ 2 := by

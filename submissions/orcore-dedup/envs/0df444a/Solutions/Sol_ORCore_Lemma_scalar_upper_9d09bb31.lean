@@ -2,7 +2,6 @@
 -- Graph-refinement submission: the proof is the helper lemma `scalar_upper` of Sol_SubsetShrink_DFO_eq_22.lean (@queelius), unchanged.
 
 import Mathlib
-import Definitions.Def_SubsetShrink_DFO_Model
 
 open scoped InnerProductSpace
 

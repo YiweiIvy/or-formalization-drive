@@ -2,9 +2,7 @@
 -- Graph-refinement submission: the proof is the helper lemma `pref_card` of Sol_SeqLoss_Equidistance_theorem_2.lean (@arexychen), unchanged.
 
 import Mathlib
-import Definitions.Def_SeqLoss_Equidistance_IdealAllocations
 
-open SeqLoss.Equidistance
 open scoped BigOperators
 
 theorem solution {n k : ℕ} (hk : k ≤ n) :

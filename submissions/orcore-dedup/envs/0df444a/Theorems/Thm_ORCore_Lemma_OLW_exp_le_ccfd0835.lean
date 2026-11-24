@@ -9,10 +9,8 @@
 --   It imports the definitions its statement uses. Here it is stated once; the refactored solutions of this submission cite it.
 
 import Mathlib
-import Definitions.Def_OnlineLearningOCO_Winnow_Winnow
 
 open Finset
-open OnlineLearningOCO.Winnow
 
 namespace ORCore.Lemma
 

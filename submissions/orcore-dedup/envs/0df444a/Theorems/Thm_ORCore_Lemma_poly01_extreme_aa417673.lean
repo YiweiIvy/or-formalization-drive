@@ -9,11 +9,7 @@
 --   It imports the definitions its statement uses. Here it is stated once; the refactored solutions of this submission cite it.
 
 import Mathlib
-import Definitions.Def_CandesTao_Decoding_RestrictedIsometry
-import Definitions.Def_CandesTao_Decoding_L1Minimization
-import Theorems.Thm_CandesTao_Decoding_theta_le_delta_le_theta_add_max
 
-open CandesTao.Decoding
 
 namespace ORCore.Lemma
 

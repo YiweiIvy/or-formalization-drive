@@ -2,7 +2,6 @@
 -- Graph-refinement submission: `MartOT.Abs.lemma_3_2` has the same statement as `MartOT.Card.lemma_3_2`; this proof cites it.
 
 import Mathlib
-import Definitions.Def_MartOT_Var_Setting
 import Theorems.Thm_MartOT_Card_lemma_3_2
 
 open MeasureTheory

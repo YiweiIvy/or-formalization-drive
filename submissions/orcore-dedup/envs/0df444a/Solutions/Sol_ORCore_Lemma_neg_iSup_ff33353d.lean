@@ -2,8 +2,6 @@
 -- Graph-refinement submission: the proof is the helper lemma `neg_iSup` of Sol_StochConvexProg_Duality_eq_4_2.lean (@shivm), unchanged.
 
 import Mathlib
-import Definitions.Def_StochConvexProg_Duality_Problem
-import Definitions.Def_StochConvexProg_Duality_Dual
 
 open MeasureTheory
 

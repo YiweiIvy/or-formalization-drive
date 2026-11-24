@@ -2,7 +2,6 @@
 -- Graph-refinement submission: the proof is the helper lemma `ms_ae_ne` of Sol_MechanismDesign_BilateralTrade_myerson_satterthwaite.lean (@mrfancypants), unchanged.
 
 import Mathlib
-import Definitions.Def_MechanismDesign_BilateralTrade_Model
 
 open MeasureTheory
 open Set Filter Topology

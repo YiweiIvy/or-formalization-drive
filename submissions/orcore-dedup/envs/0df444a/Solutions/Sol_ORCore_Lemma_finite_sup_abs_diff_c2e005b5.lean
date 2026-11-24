@@ -2,7 +2,6 @@
 -- Graph-refinement submission: the proof is the helper lemma `finite_sup_abs_diff` of Sol_LovejoyPOMDP_Monotone_proposition_2.lean (@sometik179), unchanged.
 
 import Mathlib
-import Definitions.Def_LovejoyPOMDP_Monotone_Model
 
 open scoped BigOperators
 open scoped BigOperators

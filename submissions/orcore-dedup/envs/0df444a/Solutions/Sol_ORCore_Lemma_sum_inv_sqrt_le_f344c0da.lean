@@ -2,10 +2,8 @@
 -- Graph-refinement submission: the proof is the helper lemma `sum_inv_sqrt_le` of Sol_ModernOnlineLearning_Bandits_theorem_9_17_adversarial.lean (@Nickrobbins95), unchanged.
 
 import Mathlib
-import Definitions.Def_ModernOnlineLearning_Bandits_Tsallis
 
 open Finset
-open ModernOnlineLearning.Bandits
 
 theorem solution (T : ℕ) :
     ∑ t ∈ Icc 1 T, 1 / Real.sqrt (t : ℝ) ≤ 2 * Real.sqrt (T : ℝ) := by

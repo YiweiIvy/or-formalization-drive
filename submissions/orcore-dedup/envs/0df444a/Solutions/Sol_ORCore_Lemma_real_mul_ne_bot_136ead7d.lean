@@ -2,7 +2,6 @@
 -- Graph-refinement submission: the proof is the helper lemma `real_mul_ne_bot` of Sol_MICPRep_Periodic_lemma_6_11.lean (@xwh), unchanged.
 
 import Mathlib
-import Definitions.Def_MICPRep_Periodic_Setting
 
 
 theorem solution {a : ℝ} (ha : 0 ≤ a) {x : EReal} (hx : x ≠ ⊥) :

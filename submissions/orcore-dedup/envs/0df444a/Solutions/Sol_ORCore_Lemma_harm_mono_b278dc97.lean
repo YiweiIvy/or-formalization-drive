@@ -2,9 +2,7 @@
 -- Graph-refinement submission: the proof is the helper lemma `harm_mono` of Sol_PriceOfStability_Harmonic_price_of_stability_harmonic.lean (@mrfancypants), unchanged.
 
 import Mathlib
-import Definitions.Def_PriceOfStability_Harmonic_fig11
 
-open CongestionPoA.AsymSum
 
 theorem solution {m n : ℕ} (h : m ≤ n) : (harmonic m : ℝ) ≤ (harmonic n : ℝ) := by
   have : harmonic m ≤ harmonic n := by

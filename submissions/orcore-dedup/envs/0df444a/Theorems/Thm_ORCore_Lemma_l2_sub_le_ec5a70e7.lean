@@ -10,8 +10,6 @@
 
 import Mathlib
 import Definitions.Def_DriftLinBandit_BOB_Model
-import Definitions.Def_DriftLinBandit_BOB_Bob
-import Theorems.Thm_DriftLinBandit_BOB_proposition_1
 
 open MeasureTheory DriftLinBandit.BOB
 

@@ -2,7 +2,6 @@
 -- Graph-refinement submission: the proof is the helper lemma `pdf_eq` of Sol_ServiceParts_NonstatPalm_arrival_times_order_statistics.lean (@mrfancypants), unchanged.
 
 import Mathlib
-import Definitions.Def_ServiceParts_NonstatPalm_ResupplySystem
 
 open MeasureTheory ProbabilityTheory
 open MeasureTheory ProbabilityTheory Filter Topology

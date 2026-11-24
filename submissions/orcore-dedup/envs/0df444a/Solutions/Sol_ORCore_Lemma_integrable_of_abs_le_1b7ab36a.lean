@@ -2,7 +2,6 @@
 -- Graph-refinement submission: the proof is the helper lemma `integrable_of_abs_le` of Sol_GraphConvSubgrad_StatConc_theorem_4_4.lean (@Nickrobbins95), unchanged.
 
 import Mathlib
-import Definitions.Def_GraphConvSubgrad_StatConc_Setting
 
 open MeasureTheory Real Filter
 

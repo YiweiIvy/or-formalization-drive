@@ -9,11 +9,9 @@
 --   It imports the definitions its statement uses. Here it is stated once; the refactored solutions of this submission cite it.
 
 import Mathlib
-import Definitions.Def_NesterovODE_Restart_Setting
 
-open Set NesterovODE.WellPosed
+open Set
 open scoped RealInnerProductSpace
-open NesterovODE.StrongCvx
 
 namespace ORCore.Lemma
 

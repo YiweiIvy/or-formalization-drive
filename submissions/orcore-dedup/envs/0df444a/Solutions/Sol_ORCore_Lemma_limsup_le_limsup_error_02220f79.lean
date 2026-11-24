@@ -2,7 +2,6 @@
 -- Graph-refinement submission: the proof is the helper lemma `limsup_le_limsup_error` of Sol_KingmanSubadditive_Ergodic_theorem_1.lean (@sometik179), unchanged.
 
 import Mathlib
-import Definitions.Def_KingmanSubadditive_Ergodic_Process
 
 open Filter
 open scoped Topology

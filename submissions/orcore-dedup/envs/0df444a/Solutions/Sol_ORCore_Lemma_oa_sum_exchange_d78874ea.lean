@@ -2,7 +2,6 @@
 -- Graph-refinement submission: the proof is the helper lemma `oa_sum_exchange` of Sol_RevenueManagement_reserve_price_auction_optimal.lean (@mrfancypants), unchanged.
 
 import Mathlib
-import Definitions.Def_RevenueManagement_auctions
 
 open Classical Finset
 

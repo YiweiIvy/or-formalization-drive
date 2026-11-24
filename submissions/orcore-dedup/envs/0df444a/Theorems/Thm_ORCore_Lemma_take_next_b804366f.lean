@@ -9,11 +9,8 @@
 --   It imports the definitions its statement uses. Here it is stated once; the refactored solutions of this submission cite it.
 
 import Mathlib
-import Definitions.Def_IgnallSchrage_MeanCompletion_LowerBound
-import Definitions.Def_IgnallSchrage_Makespan_Procedure
 
 open scoped BigOperators
-open IgnallSchrage.MeanCompletion
 
 namespace ORCore.Lemma
 

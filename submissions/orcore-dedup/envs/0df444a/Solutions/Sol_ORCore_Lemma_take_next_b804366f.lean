@@ -2,11 +2,8 @@
 -- Graph-refinement submission: the proof is the helper lemma `take_next` of Sol_IgnallSchrage_MeanCompletion_branch_and_bound_optimal.lean (@miao), unchanged.
 
 import Mathlib
-import Definitions.Def_IgnallSchrage_MeanCompletion_LowerBound
-import Definitions.Def_IgnallSchrage_Makespan_Procedure
 
 open scoped BigOperators
-open IgnallSchrage.MeanCompletion
 
 theorem solution {α : Type*} (l : List α) (k : ℕ) (hk : k < l.length) :
     l.take (k + 1) = l.take k ++ [l[k]] := by

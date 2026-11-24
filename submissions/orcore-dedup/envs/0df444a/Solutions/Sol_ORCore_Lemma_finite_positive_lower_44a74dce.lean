@@ -2,7 +2,6 @@
 -- Graph-refinement submission: the proof is the helper lemma `finite_positive_lower` of Sol_AryaANN_Search_lemma_5.lean (@sometik179), unchanged.
 
 import Mathlib
-import Definitions.Def_AryaANN_Search_Setting
 
 
 theorem solution {ι : Type*} [Fintype ι] (f : ι → ℝ) (hf : ∀ i, 0 < f i) :

@@ -2,10 +2,8 @@
 -- Graph-refinement submission: the proof is the helper lemma `le_of_small_penalties` of Sol_MartinetReg_ConvexMin_theorem3.lean (@moona3k), unchanged.
 
 import Mathlib
-import Definitions.Def_MartinetReg_ConvexMin_Setting
 
 open Filter Topology
-open MartinetReg.ConvexMin
 
 theorem solution (A B D : ℝ)
     (h : ∀ t : ℝ, 0 < t → t ≤ 1 → A ≤ B+t*D) : A ≤ B := by

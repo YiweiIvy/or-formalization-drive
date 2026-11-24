@@ -2,11 +2,9 @@
 -- Graph-refinement submission: the proof is the helper lemma `gaussian_integrable` of Sol_DistCov_Hilbert_gaussian_series.lean (@waitingintime), unchanged.
 
 import Mathlib
-import Definitions.Def_DistCov_Hilbert_Setting
 
 open MeasureTheory ProbabilityTheory Filter
 open scoped Topology NNReal
-open DistCov.Hilbert
 
 theorem solution (a : ℝ≥0) : Integrable (fun x : ℝ => x) (gaussianReal 0 a) :=
   (memLp_id_gaussianReal (μ := 0) (v := a) 1).integrable (by norm_num)

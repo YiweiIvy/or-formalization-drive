@@ -2,7 +2,6 @@
 -- Graph-refinement submission: the proof is the helper lemma `reciprocal_fiber_average` of Sol_TalagrandConc_Assignment_theorem_10_5.lean (@sometik179), unchanged.
 
 import Mathlib
-import Definitions.Def_TalagrandConc_Assignment_Basic
 
 open scoped BigOperators
 

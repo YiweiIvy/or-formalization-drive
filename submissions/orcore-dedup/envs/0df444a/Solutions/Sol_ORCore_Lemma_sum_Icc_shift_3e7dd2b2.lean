@@ -2,7 +2,6 @@
 -- Graph-refinement submission: the proof is the helper lemma `sum_Icc_shift` of Sol_SecretaryPred_LearnedDynkin_numerical_bounds.lean (@queelius), unchanged.
 
 import Mathlib
-import Definitions.Def_SecretaryPred_LearnedDynkin_Setting
 
 open MeasureTheory
 open scoped BigOperators

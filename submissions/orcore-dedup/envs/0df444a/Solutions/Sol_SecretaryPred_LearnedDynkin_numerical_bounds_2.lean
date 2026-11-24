@@ -2,7 +2,6 @@
 -- Graph-refinement submission: Sol_SecretaryPred_LearnedDynkin_numerical_bounds.lean with the proof of `sum_Icc_shift` replaced by a citation of the shared lemma `ORCore.Lemma.sum_Icc_shift_3e7dd2b2`.
 -- The rest of the proof is the accepted solution, unchanged.
 
-import Definitions.Def_SecretaryPred_LearnedDynkin_Setting
 import Init
 import Mathlib
 import Theorems.Thm_ORCore_Lemma_sum_Icc_shift_3e7dd2b2

@@ -2,7 +2,6 @@
 -- Graph-refinement submission: the proof is the helper lemma `rpc0b_gauss_sq_int` of Sol_HighDimProb_Isoperimetry_random_projection_concentration.lean (@Nickrobbins95), unchanged.
 
 import Mathlib
-import Definitions.Def_HighDimProb_Isoperimetry_UniformProjection
 
 open MeasureTheory ProbabilityTheory
 

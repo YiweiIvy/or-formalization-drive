@@ -9,9 +9,6 @@
 --   It imports the definitions its statement uses. Here it is stated once; the refactored solutions of this submission cite it.
 
 import Mathlib
-import Definitions.Def_Grunbaum2003_IsDPolytope
-import Definitions.Def_Grunbaum2003_PolytopeFace
-import Definitions.Def_Grunbaum2003_IsKNeighborly
 
 open scoped BigOperators
 

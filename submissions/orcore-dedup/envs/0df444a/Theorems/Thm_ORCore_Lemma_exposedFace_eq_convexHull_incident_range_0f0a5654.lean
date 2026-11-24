@@ -9,9 +9,6 @@
 --   It imports the definitions its statement uses. Here it is stated once; the refactored solutions of this submission cite it.
 
 import Mathlib
-import Definitions.Def_auto_GRU_M05_EFFECTIVE_TYPES_IsDPolytope
-import Definitions.Def_auto_GRU_M05_EFFECTIVE_TYPES_PolytopeFace
-import Definitions.Def_auto_GRU_M05_EFFECTIVE_TYPES_SchemeRealizes
 
 open scoped BigOperators
 

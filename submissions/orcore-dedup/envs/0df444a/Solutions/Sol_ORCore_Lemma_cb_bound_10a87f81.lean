@@ -2,7 +2,6 @@
 -- Graph-refinement submission: the proof is the helper lemma `cb_bound` of Sol_ModernOnlineLearning_LowerBounds_theorem_5_1.lean (@carlok), unchanged.
 
 import Mathlib
-import Definitions.Def_ModernOnlineLearning_LowerBounds_Protocol
 
 open Finset
 

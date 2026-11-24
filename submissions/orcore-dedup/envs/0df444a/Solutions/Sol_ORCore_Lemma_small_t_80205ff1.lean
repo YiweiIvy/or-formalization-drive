@@ -2,7 +2,6 @@
 -- Graph-refinement submission: the proof is the helper lemma `small_t` of Sol_NecoaraNG_GMQuasi_theorem_11.lean (@carlok), unchanged.
 
 import Mathlib
-import Definitions.Def_NecoaraNG_GMIff_Setting
 
 open scoped InnerProductSpace
 

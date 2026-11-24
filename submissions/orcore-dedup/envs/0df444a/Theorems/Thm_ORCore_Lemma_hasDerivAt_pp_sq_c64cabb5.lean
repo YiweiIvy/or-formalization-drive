@@ -9,10 +9,8 @@
 --   It imports the definitions its statement uses. Here it is stated once; the refactored solutions of this submission cite it.
 
 import Mathlib
-import Definitions.Def_StallEconomy_TripLength_Setting
 
 open MeasureTheory Set
-open StallEconomy.TripLength
 
 namespace ORCore.Lemma
 

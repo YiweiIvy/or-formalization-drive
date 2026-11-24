@@ -2,7 +2,6 @@
 -- Graph-refinement submission: the proof is the helper lemma `xlog_ratio_lower` of Sol_LogSobolevMC_LowerBound_theorem_3_9.lean (@sometik179), unchanged.
 
 import Mathlib
-import Definitions.Def_LogSobolevMC_LowerBound_Setting
 
 
 theorem solution (a S : ℝ) (ha : 0 ≤ a) (hS : 0 < S) :

@@ -2,9 +2,7 @@
 -- Graph-refinement submission: the proof is the helper lemma `g70slt_inner_eq` of Sol_NatureSLT_Margin_margin_vc_dim_bound.lean (@fizzyinc3), unchanged.
 
 import Mathlib
-import Definitions.Def_NatureSLT_Margin_marginVCDim
 
-open NatureSLT.Margin
 open scoped InnerProductSpace
 
 theorem solution {n : ℕ} (u v : EuclideanSpace ℝ (Fin n)) :

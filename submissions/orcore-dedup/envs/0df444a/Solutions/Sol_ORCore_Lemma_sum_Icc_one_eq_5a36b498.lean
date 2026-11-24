@@ -2,8 +2,6 @@
 -- Graph-refinement submission: the proof is the helper lemma `sum_Icc_one_eq` of Sol_SmithRegenerative_Ergodic_theorem_7.lean (@mrfancypants), unchanged.
 
 import Mathlib
-import Definitions.Def_SmithRegenerative_Ergodic_Renewal
-import Definitions.Def_SmithRegenerative_Ergodic_CumulativeProcess
 
 open MeasureTheory ProbabilityTheory Filter Topology
 

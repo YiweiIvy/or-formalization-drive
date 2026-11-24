@@ -2,10 +2,8 @@
 -- Graph-refinement submission: the proof is the helper lemma `sum_pi_succ` of Sol_SuttonTD_Convergence_expected_visits_eq.lean (@Nickrobbins95), unchanged.
 
 import Mathlib
-import Definitions.Def_SuttonTD_Convergence_ExpectedVisits
 
 open Filter Topology Matrix
-open SuttonTD.Convergence
 
 theorem solution {N : Type*} [Fintype N] (m : ℕ) (F : (Fin (m+1) → N) → ℝ) :
     ∑ s, F s = ∑ a : N, ∑ s' : Fin m → N, F (Fin.cons a s') := by

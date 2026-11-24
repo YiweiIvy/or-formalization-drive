@@ -2,7 +2,6 @@
 -- Graph-refinement submission: the proof is the helper lemma `p6b_hoeff_fin` of Sol_OnlineConvexOpt_GamesDuality_simple_lp_regret_v2.lean (@Nickrobbins95), unchanged.
 
 import Mathlib
-import Definitions.Def_OnlineConvexOpt_GamesDuality_Game_v2
 
 
 open MeasureTheory ProbabilityTheory in

@@ -2,11 +2,9 @@
 -- Graph-refinement submission: the proof is the helper lemma `pow_add_le2` of Sol_FedergruenZipkin_AvgCost_theorem1_critical_number_optimal.lean (@Nickrobbins95), unchanged.
 
 import Mathlib
-import Definitions.Def_FedergruenZipkin_AvgCost_Model
 
 open Filter Topology Asymptotics
 open scoped ENNReal
-open FedergruenZipkin.AvgCost
 
 theorem solution (a c : ℝ) (ha : 0 ≤ a) (hc : 0 ≤ c) (n : ℕ) :
     (a + c) ^ n ≤ 2 ^ n * (a ^ n + c ^ n) := by

@@ -9,7 +9,6 @@
 --   It imports the definitions its statement uses. Here it is stated once; the refactored solutions of this submission cite it.
 
 import Mathlib
-import Definitions.Def_InvIntegration_Behavioral_Model
 
 open MeasureTheory ProbabilityTheory
 

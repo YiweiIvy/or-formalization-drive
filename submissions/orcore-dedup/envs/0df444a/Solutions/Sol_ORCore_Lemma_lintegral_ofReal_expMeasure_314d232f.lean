@@ -2,12 +2,9 @@
 -- Graph-refinement submission: the proof is the helper lemma `lintegral_ofReal_expMeasure` of Sol_SennottDP_ContinuousTime_asm_optimal_ctmdc_v2.lean (@Nickrobbins95), unchanged.
 
 import Mathlib
-import Definitions.Def_SennottDP_ContinuousTime_ApproxSeq
-import Definitions.Def_SennottDP_ContinuousTime_CTMDC
 
 open scoped ENNReal
 open Filter Topology MeasureTheory ProbabilityTheory
-open SennottDP.ContinuousTime
 
 theorem solution {r : ℝ} (hr : 0 < r) :
     ∫⁻ s, ENNReal.ofReal s ∂(expMeasure r) = ENNReal.ofReal (1 / r) := by

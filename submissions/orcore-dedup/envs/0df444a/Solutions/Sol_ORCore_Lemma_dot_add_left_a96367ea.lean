@@ -3,8 +3,6 @@
 
 import Mathlib
 import Definitions.Def_ConvStochDual_Existence_Setting
-import Theorems.Thm_ConvStochDual_Existence_theorem_25
-import Theorems.Thm_ConvStochDual_Existence_lemma_16_VY
 
 open MeasureTheory Filter
 open ConvStochDual.Existence

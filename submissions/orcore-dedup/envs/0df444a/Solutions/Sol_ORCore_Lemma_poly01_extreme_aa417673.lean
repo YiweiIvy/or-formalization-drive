@@ -2,11 +2,7 @@
 -- Graph-refinement submission: the proof is the helper lemma `poly01_extreme` of Sol_CandesTao_Decoding_l1_recovers_sparse_vector_2.lean (@raresbuhai), unchanged.
 
 import Mathlib
-import Definitions.Def_CandesTao_Decoding_RestrictedIsometry
-import Definitions.Def_CandesTao_Decoding_L1Minimization
-import Theorems.Thm_CandesTao_Decoding_theta_le_delta_le_theta_add_max
 
-open CandesTao.Decoding
 
 theorem solution {n k : ℕ} (y : Fin n → ℝ)
     (hy : y ∈ ({z : Fin n → ℝ | (∀ j, 0 ≤ z j ∧ z j ≤ 1) ∧ ∑ j, z j ≤ k}).extremePoints ℝ) :

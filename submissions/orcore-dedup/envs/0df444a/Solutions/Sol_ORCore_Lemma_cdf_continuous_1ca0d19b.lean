@@ -2,7 +2,6 @@
 -- Graph-refinement submission: the proof is the helper lemma `cdf_continuous` of Sol_LariviereIGFR_Moments_theorem_2.lean (@Nickrobbins95), unchanged.
 
 import Mathlib
-import Definitions.Def_LariviereIGFR_Moments_Setting
 
 open MeasureTheory ProbabilityTheory Filter Topology Set
 

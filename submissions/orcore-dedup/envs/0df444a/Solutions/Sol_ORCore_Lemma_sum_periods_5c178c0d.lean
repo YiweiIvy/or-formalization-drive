@@ -2,12 +2,9 @@
 -- Graph-refinement submission: the proof is the helper lemma `sum_periods` of Sol_AIMInventory_Known_theorem_2.lean (@sometik179), unchanged.
 
 import Mathlib
-import Definitions.Def_AIMInventory_Known_AIM
-import Definitions.Def_AIMInventory_Known_Queue
 
 open MeasureTheory
 open scoped NNReal BigOperators
-open CappedBaseStock AIMInventory.Known
 
 theorem solution (f : ℕ → ℝ) (T : ℕ) :
     ∑ t ∈ Finset.Icc 1 T, f t = ∑ i ∈ Finset.range T, f (i+1) := by

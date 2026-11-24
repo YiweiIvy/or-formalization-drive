@@ -2,7 +2,6 @@
 -- Graph-refinement submission: the proof is the helper lemma `improvement_payoff_abs_sub_le` of Sol_PandoraBO_Private20261023_reservation_index_exists_unique.lean (@QianJaneXie), unchanged.
 
 import Mathlib
-import Definitions.Def_PandoraBO_Model
 
 open MeasureTheory
 

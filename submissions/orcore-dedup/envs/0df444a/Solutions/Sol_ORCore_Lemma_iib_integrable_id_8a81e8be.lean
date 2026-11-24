@@ -2,7 +2,6 @@
 -- Graph-refinement submission: the proof is the helper lemma `iib_integrable_id` of Sol_InvIntegration_Behavioral_proposition_3.lean (@tianyipeng), unchanged.
 
 import Mathlib
-import Definitions.Def_InvIntegration_Behavioral_Model
 
 open MeasureTheory ProbabilityTheory
 

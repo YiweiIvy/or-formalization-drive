@@ -2,8 +2,6 @@
 -- Graph-refinement submission: the proof is the helper lemma `sc_sum_update` of Sol_PathFindingLP_WeightFunction_slack_sensitivity_bound.lean (@Nickrobbins95), unchanged.
 
 import Mathlib
-import Definitions.Def_PathFindingLP_WeightFunction_RegularizedObjective
-import Definitions.Def_PathFindingLP_WeightFunction_SlackSensitivity
 
 open Matrix
 

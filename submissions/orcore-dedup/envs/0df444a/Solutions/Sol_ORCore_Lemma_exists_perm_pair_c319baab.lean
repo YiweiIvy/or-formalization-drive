@@ -2,9 +2,8 @@
 -- Graph-refinement submission: the proof is the helper lemma `exists_perm_pair` of Sol_JointMixND_QuadOT_theorem_5.lean (@tianyipeng), unchanged.
 
 import Mathlib
-import Definitions.Def_JointMixND_QuadOT_Problems
 
-open MeasureTheory ProbabilityTheory JointMixND.QuadOT
+open MeasureTheory ProbabilityTheory
 
 theorem solution {n : ℕ} (i j i' j' : Fin n) (hij : i ≠ j) (hij' : i' ≠ j') :
     ∃ σ : Equiv.Perm (Fin n), σ i' = i ∧ σ j' = j := by

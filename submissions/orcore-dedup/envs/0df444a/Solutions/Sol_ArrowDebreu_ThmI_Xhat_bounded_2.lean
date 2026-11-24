@@ -5,8 +5,6 @@
 import Mathlib
 import Definitions.Def_ArrowDebreu_Shared_Economy
 import Definitions.Def_ArrowDebreu_ThmI_AssumptionsItoIV
-import Definitions.Def_ArrowDebreu_Shared_IsCompetitiveEquilibrium
-import Definitions.Def_ArrowDebreu_Shared_AbstractEconomy
 import Definitions.Def_ArrowDebreu_ThmI_economyE
 import Theorems.Thm_ArrowDebreu_ThmI_Yhat_bounded
 import Theorems.Thm_ORCore_Lemma_rst91_le_norm_6ae51bdc
