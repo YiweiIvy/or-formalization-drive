@@ -58,7 +58,28 @@ mission goals, so deprecating them in favour of their root would disconnect noth
 in `reports/deprecation_candidates.jsonl`, in the row format of `manifest.jsonl`, for maintainers to
 review. All 115 are mission members or milestones in `seeds.json`. On Prove2Me, deprecation hides a
 node from discovery but keeps it importable, so it is reversible archiving, not deletion. Applying
-them (renaming the file to `manifest.jsonl`) gives pair connectivity 40.96% instead of 40.92%.
+them (renaming the file to `manifest.jsonl`) gave pair connectivity 40.96% instead of 40.92%
+(measured before section 5 was added).
+
+### 5. Shared lemmas
+
+Many accepted solutions prove the same helper lemma privately, in papers from different works.
+
+1. Collect the helper lemmas declared inside accepted solutions of theorems in mission cones
+   (182,399 lemmas), normalise their statements as in section 1, and keep the statements that
+   reach missions of two or more works (3,732 clusters).
+2. Check one member's proof of each cluster standalone: with Mathlib alone, or with the local
+   definition files its statement uses. 923 clusters pass.
+3. Choose clusters greedily by the number of missions newly connected to another work. Each chosen
+   cluster becomes a theorem `ORCore.Lemma.<name>_<hash>` (`Theorems/Thm_ORCore_Lemma_*.lean`)
+   whose solution is the original helper proof, unchanged and credited to its author.
+4. For each original theorem involved, write a new solution (`Sol_<slug>_<n>.lean`): the accepted
+   solution, unchanged, except that the helper's proof is replaced by a citation
+   `@ORCore.Lemma.<name> args`, and the lemma is imported.
+
+273 solutions were rewritten; 267 pass and are shipped, with 123 shared lemmas. The 6 that fail
+cite a lemma whose statement uses a same-named definition from another paper; they are dropped.
+`reports/shared_lemmas.jsonl` lists each lemma and the solutions that cite it.
 
 ## Result
 
@@ -66,19 +87,20 @@ them (renaming the file to `manifest.jsonl`) gives pair connectivity 40.96% inst
 
 | | base | submission |
 |---|---:|---:|
-| Pair connectivity | 6.87% | 40.92% |
-| `S_reuse` | 36.21% | 36.21% |
-| Mission pair connectivity | 6.51% | 26.25% |
-| Weak components | 3,103 | 2,397 |
-| Largest component | 11,085 | 35,143 |
-| Isolated nodes | 815 | 769 |
+| Pair connectivity | 6.87% | 44.31% |
+| `S_reuse` | 36.21% | 42.25% |
+| Mission pair connectivity | 6.51% | 29.92% |
+| Weak components | 3,103 | 2,297 |
+| Largest component | 11,085 | 36,571 |
+| Isolated nodes | 815 | 766 |
 
-Cost: 321 new definition files, 1,230 new theorems (all proved), 62 new proofs of original
-theorems, no deprecations. Most new theorems are one-line `rfl` bridges; no new node
-touches more than two original components directly.
+Cost: 321 new definition files, 1,353 new theorems (all proved: 1,230 bridges and links, 123 shared
+lemmas), 329 new proofs of original theorems (62 citation proofs, 267 refactored solutions), no
+deprecations. Most new theorems are one-line `rfl` bridges.
 
-`S_reuse` does not move: bridges import the originals, so they are in no mission's cone. Moving it
-needs original solutions refactored to cite shared lemmas (planned).
+Sections 1–4 leave `S_reuse` unchanged: bridges import the originals, so they are in no mission's
+cone. Section 5 moves it: a refactored solution puts the shared lemma into the cone of every mission
+above that theorem, so missions of different works now share a node.
 
 ## Reports
 
@@ -88,6 +110,7 @@ needs original solutions refactored to cite shared lemmas (planned).
 - `reports/near_duplicate_bridges.jsonl`: each near-duplicate pair and the proof used.
 - `reports/duplicate_theorems.jsonl`: every duplicate theorem, its root and the action taken.
 - `reports/deprecation_candidates.jsonl`: the 115 proposed deprecations (not applied).
+- `reports/shared_lemmas.jsonl`: each shared lemma, its imports, and the refactored solutions citing it.
 
 These are the deprecation candidates for a later cleanup: once the theorems that import a local
 copy are re-proved on the common definition, the local copy can be deprecated without cutting
@@ -97,7 +120,7 @@ anything off.
 
 Lean 4.33.1, Mathlib `0df444a`. A batch checker (`Checker.lean` in the tooling) imports Mathlib once,
 then elaborates each file together with its real local import closure, from source, and reports
-every error. All 2,781 Lean files of this submission pass. Proofs contain no `sorry`. A citation
+every error. All 3,294 Lean files of this submission pass. Proofs contain no `sorry`. A citation
 proof imports the cited theorem's statement file, which ends in `sorry` like every statement file
 in the snapshot.
 
