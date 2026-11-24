@@ -1,8 +1,7 @@
 # orcore-dedup: machine-checked deduplication of definitions and theorems
 
-**Status: work in progress, not yet submitted.** Every Lean file below passes the in-process check
-described under [Verification](#verification). The standalone per-file compile that
-CONTRIBUTING.md asks for has not been run yet.
+**Status: work in progress, not yet submitted.** All 3,356 Lean files pass the checks described
+under [Verification](#verification), including a standalone `lean -o` compile of each file.
 
 The snapshot was formalized paper by paper, so many objects are defined again and again under local
 names, and many theorems are posted more than once. This submission finds those duplicates
@@ -118,14 +117,32 @@ anything off.
 
 ## Verification
 
-Lean 4.33.1, Mathlib `0df444a`. A batch checker (`Checker.lean` in the tooling) imports Mathlib once,
-then elaborates each file together with its real local import closure, from source, and reports
-every error. All 3,294 Lean files of this submission pass. Proofs contain no `sorry`. A citation
-proof imports the cited theorem's statement file, which ends in `sorry` like every statement file
-in the snapshot.
+Lean 4.33.1, Mathlib `0df444a`. All 3,356 Lean files (321 definition files, 1,353 statement files,
+1,682 proof files) pass two independent checks.
 
-Still to do before submitting: compile each file standalone with `lean -o` against built `.olean`s,
-and `#print axioms` for every proof.
+1. **Batch check, while building.** `Checker.lean` (tooling) imports Mathlib once, then elaborates
+   each file from source together with its real local import closure, and reports every error.
+2. **Standalone check (CONTRIBUTING.md rule 5).**
+   - *Compile:* every file is compiled by its own `lean -o` process, in dependency order, against
+     the `.olean`s of what it imports: 5,704 modules (the 3,356 files, the 2,019 snapshot files they
+     import, and the statement files of the 329 original theorems proved here). All compile.
+   - *Axioms:* for each proof's `solution` and each definition, a Lean program walks the
+     dependencies through every local constant (this submission's and the snapshot's `Definitions`
+     and `Solutions`) and records every axiom it reaches. None besides `propext`,
+     `Classical.choice` and `Quot.sound`, so no `sorry` (`sorryAx`), no `native_decide`
+     (`Lean.ofReduceBool`) and no custom axiom. Library constants (Lean, Batteries, Mathlib) are
+     not walked; they are trusted to use the standard axioms, which Mathlib's CI enforces.
+   - *Citations:* a proof that cites a theorem imports its statement file, which ends in `sorry`
+     like every statement file in the snapshot. Each cited statement was checked for a proof, in
+     the snapshot or in this submission. 9 proofs cite Open theorems; each is the accepted solution
+     with one helper lemma replaced (section 5), and the accepted solution cites the same theorems.
+   - *Right statement:* the type of each `solution` was compared with the theorem's statement
+     (same expression up to bound-variable names): 1,676 equal; 4 equal to the negation, for theorems
+     the snapshot marks Disproved. For the other 2, Lean checked `example : <statement> := solution`:
+     one solution declares its own `Primcodable` instances, equal by definition to the statement's;
+     one disproof refutes a statement about `ι : Type*` at `ι : Type`, like its accepted original.
+
+Not checked yet: that each file imports only what it uses.
 
 ## Reproducing
 
