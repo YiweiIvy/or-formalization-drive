@@ -1,15 +1,16 @@
 # orcore-dedup: machine-checked deduplication of definitions and theorems
 
-**Status: work in progress, not yet submitted.** All 3,356 Lean files pass the checks described
-under [Verification](#verification), including a standalone `lean -o` compile of each file.
-
 The snapshot was formalized paper by paper, so many objects are defined again and again under local
-names, and many theorems are posted more than once. This submission finds those duplicates
-mechanically, proves in Lean that they are the same, and uses the proofs to connect the graph and to
-deprecate redundant nodes. Nothing is matched by keyword or by eye: a duplicate counts only when a
-Lean proof of the equality is checked.
+names, many theorems are posted more than once, and many helper lemmas are proved again inside
+solutions of different papers. This submission finds those duplicates mechanically across the whole
+`0df444a` environment, proves in Lean that they are the same, and uses the proofs to connect the
+graph. Nothing is matched by keyword or by eye: a duplicate counts only when a Lean proof of the
+equality is checked.
 
 ## Method
+
+All candidates were found by scripts and every one was checked by Lean; the only hand-written Lean
+is the bridge of section 3. The tooling is described under [Reproducing](#reproducing).
 
 ### 1. Exact duplicate definitions → common definitions
 
@@ -52,13 +53,8 @@ cites the root was checked (1,443 pass). Then:
 | new proof shipped (`Sol_<slug>_<n>.lean`) | 62 | the theorem is Open (29 are), or joins a component, or links two works |
 | report only | 1,381 | a new proof would add nothing |
 
-**Deprecation is proposed, not applied.** 115 of the duplicates are imported by nothing and are not
-mission goals, so deprecating them in favour of their root would disconnect nothing. They are listed
-in `reports/deprecation_candidates.jsonl`, in the row format of `manifest.jsonl`, for maintainers to
-review. All 115 are mission members or milestones in `seeds.json`. On Prove2Me, deprecation hides a
-node from discovery but keeps it importable, so it is reversible archiving, not deletion. Applying
-them (renaming the file to `manifest.jsonl`) gave pair connectivity 40.96% instead of 40.92%
-(measured before section 5 was added).
+The checked citations are also the evidence for the deprecations proposed under
+[Deprecations](#deprecations).
 
 ### 5. Shared lemmas
 
@@ -78,47 +74,38 @@ Many accepted solutions prove the same helper lemma privately, in papers from di
 
 273 solutions were rewritten; 267 pass and are shipped, with 123 shared lemmas. The 6 that fail
 cite a lemma whose statement uses a same-named definition from another paper; they are dropped.
-`reports/shared_lemmas.jsonl` lists each lemma and the solutions that cite it.
 
 The lemma files first carried over the `import` and `open` lines of the solution they came from.
 Imports a file does not use were then removed (see [Verification](#verification)), which cost
 0.5 points of `S_reuse` (42.25% → 41.71%) and 0.04 points of pair connectivity: those edges
 came from imports, not from use.
 
-## Result
+## What was added
 
-`python3 benchmark/or_bench.py score --submission submissions/orcore-dedup`
+- Definition files: 321, all `Def_ORCore_*`. 320 hold common definitions (section 1): one per
+  group of duplicate definitions, a copy of the duplicated declarations, on Mathlib alone or on
+  other common definitions. 1 is the hand-written `ORCore.ruinTime` (section 3).
+- Theorems: 1,353, all proved, none Open.
+  - 1,184 bridges `ORCore.Bridge.*`: a local definition equals the common one, by `rfl`
+    (1,182 from section 1, 2 for `ruinTime`);
+  - 46 near-duplicate links: 25 `ORCore.Equiv.*`, 21 `ORCore.Link.*` (section 2);
+  - 123 shared lemmas `ORCore.Lemma.*` (section 5), each with its original proof.
+- New proofs of theorems of the snapshot: 329.
+  - 62 citation proofs of duplicate theorems (section 4), importing the root theorem; 29 of them
+    prove theorems that were Open;
+  - 267 refactored solutions (section 5): the accepted solution with one helper lemma replaced by
+    a citation, importing the shared lemma.
 
-| | base | submission |
-|---|---:|---:|
-| Pair connectivity | 6.87% | 44.27% |
-| `S_reuse` | 36.21% | 41.71% |
-| Mission pair connectivity | 6.51% | 29.86% |
-| Weak components | 3,103 | 2,301 |
-| Largest component | 11,085 | 36,552 |
-| Isolated nodes | 815 | 766 |
+## Deprecations
 
-Cost: 321 new definition files, 1,353 new theorems (all proved: 1,230 bridges and links, 123 shared
-lemmas), 329 new proofs of original theorems (62 citation proofs, 267 refactored solutions), no
-deprecations. Most new theorems are one-line `rfl` bridges.
+None: this submission has no `manifest.jsonl`.
 
-Sections 1–4 leave `S_reuse` unchanged: bridges import the originals, so they are in no mission's
-cone. Section 5 moves it: a refactored solution puts the shared lemma into the cone of every mission
-above that theorem, so missions of different works now share a node.
-
-## Reports
-
-- `reports/duplicate_definitions.jsonl`: every verified duplicate-definition cluster, its copies
-  and its common definition (or `null` when it was not needed for connectivity).
-- `reports/common_definitions.jsonl`: each common definition file, with the local copies it replaces.
-- `reports/near_duplicate_bridges.jsonl`: each near-duplicate pair and the proof used.
-- `reports/duplicate_theorems.jsonl`: every duplicate theorem, its root and the action taken.
-- `reports/deprecation_candidates.jsonl`: the 115 proposed deprecations (not applied).
-- `reports/shared_lemmas.jsonl`: each shared lemma, its imports, and the refactored solutions citing it.
-
-These are the deprecation candidates for a later cleanup: once the theorems that import a local
-copy are re-proved on the common definition, the local copy can be deprecated without cutting
-anything off.
+115 deprecations are proposed in `reports/deprecation_candidates.jsonl`, in the row format of
+`manifest.jsonl`, for maintainers to decide. Each is a duplicate theorem whose citation proof of its
+root was checked (section 4), imported by nothing and not a mission goal, so deprecating it would
+disconnect nothing. They are not applied because all 115 are mission members or milestones in
+`seeds.json`. Applying them (renaming the file to `manifest.jsonl`) gave pair connectivity 40.96%
+instead of 40.92%, measured before section 5 was added.
 
 ## Verification
 
@@ -158,7 +145,53 @@ Lean 4.33.1, Mathlib `0df444a`. All 3,356 Lean files (321 definition files, 1,35
      without them, and 1 that its file uses but also reached through a lemma file whose own copy
      of that import was removed. Then all checks above were run again on the pruned files.
 
+## Result
+
+`python3 benchmark/or_bench.py score --submission submissions/orcore-dedup`:
+
+```
+env 0df444a: 54,944 original nodes; submission adds 1,674 nodes (321 definition files, 1,353 theorems, 0 of them without a proof), 329 new proofs of original theorems, 2,827 edges {'new->new': 1211, 'new->orig': 1264, 'orig->new': 290, 'orig->orig': 62}
+  deprecates 0 nodes (0 definition files, 0 theorems; 0 name a replacement); net definition files +321
+                                   base  submission
+  pair connectivity               6.87%      44.27%   gain +37.4 pt, S_pair 0.4016
+  S_reuse                        36.21%      41.71%   3,891 missions in 1,906 works, cone from goal
+  direct reuse                    0.62%       0.62%
+  mission pair connectivity       6.51%      29.86%
+  counted nodes                  54,944      54,944   original nodes that are not deprecated
+  components                      3,103       2,301   delta_conn 802, S_conn 0.2585
+  isolated nodes                    815         766
+  largest component              11,085      36,552
+```
+
+Sections 1–4 leave `S_reuse` unchanged: bridges import the originals, so they are in no mission's
+cone. Section 5 moves it: a refactored solution puts the shared lemma into the cone of every mission
+above that theorem, so missions of different works now share a node. Direct reuse does not move:
+it counts dependence on another mission's own goal, and shared lemmas are no mission's goal.
+
+## Reports
+
+- `reports/duplicate_definitions.jsonl`: every verified duplicate-definition cluster, its copies
+  and its common definition (or `null` when it was not needed for connectivity).
+- `reports/common_definitions.jsonl`: each common definition file, with the local copies it replaces.
+- `reports/near_duplicate_bridges.jsonl`: each near-duplicate pair and the proof used.
+- `reports/duplicate_theorems.jsonl`: every duplicate theorem, its root and the action taken.
+- `reports/deprecation_candidates.jsonl`: the 115 proposed deprecations (not applied).
+- `reports/shared_lemmas.jsonl`: each shared lemma, its imports, and the refactored solutions citing it.
+
+## Notes
+
+- **Local copies of common definitions.** The 2,999 verified local copies (first two reports) can
+  be deprecated in a later cleanup, once the theorems that import a copy are re-proved on the
+  common definition; then nothing is cut off.
+- **Not finished.** 348 of the 1,194 near-duplicate tests of section 2 were not run (some depend on
+  very large definition files and take many minutes each).
+- **How far this goes.** Exact and near duplicates are close to exhausted: bridging every remaining
+  verified cluster would add about 1.3 points of pair connectivity. Further gains need
+  concept-level work written by hand: a general object (an LP, a Markov chain, a queue) with
+  bridges to each paper's version.
+
 ## Reproducing
 
-The tooling (mining, checking and emitting scripts) is kept outside this repository. Its README
-lists every stage. `assemble.sh` regenerates this folder from the checked results.
+The tooling (mining, checking, emitting and verification scripts, and the Lean checkers) is not
+part of this pull request, which may change only this folder. It rebuilds this folder from the
+checked results with one command, byte for byte. It can be published separately on request.
